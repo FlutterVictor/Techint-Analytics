@@ -9,7 +9,7 @@
 * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
 body { display:flex; height:100vh; background-color:#f4f6f8; }
 
-/* Sidebar */
+/* POINT INITIAL - Sidebar */
 .sidebar {
     width:250px;
     background-color:#004080;
@@ -37,8 +37,9 @@ body { display:flex; height:100vh; background-color:#f4f6f8; }
     transition:background 0.3s;
 }
 .sidebar .logout-btn:hover { background-color:#ff3333; }
+/* POINT END - Sidebar */
 
-/* Main */
+/* POINT INITIAL - Main */
 .main { flex:1; padding:30px; overflow-y:auto; }
 header { margin-bottom:20px; display:flex; align-items:center; gap:15px; position:relative; }
 .user-photo { width:50px; height:50px; border-radius:50%; background-color:#c4c4c4; background-size:cover; background-position:center; cursor:pointer; }
@@ -46,7 +47,7 @@ header { margin-bottom:20px; display:flex; align-items:center; gap:15px; positio
 .user-role { color:#6699cc; font-size:0.9em; }
 .user-project { color:#004080; font-size:0.9em; margin-top:2px; cursor:pointer; }
 
-/* Card de seleção de projeto */
+/* POINT INITIAL - Card de seleção de projeto */
 #projectCard {
     display:none;
     position:absolute;
@@ -60,8 +61,9 @@ header { margin-bottom:20px; display:flex; align-items:center; gap:15px; positio
 }
 #projectCard h4 { margin-bottom:10px; }
 #projectCard div { margin-bottom:8px; }
+/* POINT END - Card de seleção de projeto */
 
-/* Mini-gráficos */
+/* POINT INITIAL - Mini-gráficos e preview */
 .preview-card {
     background-color:white;
     padding:20px;
@@ -75,16 +77,19 @@ header { margin-bottom:20px; display:flex; align-items:center; gap:15px; positio
 .mini-charts canvas { border-radius:6px; background:#f9f9f9; }
 .access-btn { padding:10px 20px; border:none; border-radius:6px; background-color:#004080; color:white; cursor:pointer; }
 .access-btn:hover { background-color:#0066cc; }
+/* POINT END - Mini-gráficos e preview */
 
-/* Spinner e erro */
+/* POINT INITIAL - Spinner e erro */
 .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #004080; border-radius: 50%; width:24px; height:24px; animation:spin 1s linear infinite; display:inline-block; vertical-align: middle;}
 @keyframes spin {0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);}}
 .error-icon { color:red; font-weight:bold; margin-left:5px; }
 #fileInput { display:none; }
+/* POINT END - Spinner e erro */
 </style>
 </head>
 <body>
 
+<!-- POINT INITIAL - Sidebar HTML -->
 <div class="sidebar">
     <h2>Techint Engenharia e Construção</h2>
     <div class="dashboard-item active" data-dashboard="PYCP">PYCP</div>
@@ -94,7 +99,9 @@ header { margin-bottom:20px; display:flex; align-items:center; gap:15px; positio
     <div class="dashboard-item" data-dashboard="QSMS">QSMS</div>
     <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
+<!-- POINT END - Sidebar HTML -->
 
+<!-- POINT INITIAL - Main HTML -->
 <div class="main">
     <header>
         <div class="user-photo" id="userPhoto" title="Clique para alterar foto"></div>
@@ -105,7 +112,7 @@ header { margin-bottom:20px; display:flex; align-items:center; gap:15px; positio
         </div>
         <input type="file" id="fileInput" accept="image/*">
 
-        <!-- Card flutuante de seleção de projeto -->
+        <!-- POINT INITIAL - Card de projeto -->
         <div id="projectCard">
             <h4>Selecione o Projeto</h4>
             <div><input type="radio" name="projeto" id="projetoPCI" value="PCI Usiminas"><label for="projetoPCI">PCI Usiminas (1087 colaboradores)</label></div>
@@ -114,8 +121,10 @@ header { margin-bottom:20px; display:flex; align-items:center; gap:15px; positio
             <button id="confirmProjectBtn" style="margin-top:10px; padding:6px 12px; border:none; border-radius:6px; background-color:#004080; color:white; cursor:pointer;">Confirmar</button>
             <div id="projectMessage" style="margin-top:10px;"></div>
         </div>
+        <!-- POINT END - Card de projeto -->
     </header>
 
+    <!-- POINT INITIAL - Preview Dashboards -->
     <div class="preview-card" id="previewCard">
         <h3>Sistema de Gerenciamento PYCP</h3>
         <p>Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.</p>
@@ -129,17 +138,18 @@ header { margin-bottom:20px; display:flex; align-items:center; gap:15px; positio
 
         <button class="access-btn" onclick="accessDashboard('pycp.html')">Acessar PYCP</button>
     </div>
+    <!-- POINT END - Preview Dashboards -->
 </div>
+<!-- POINT END - Main HTML -->
 
 <script>
-// Carregar usuário do localStorage ou criar default
+/* POINT INITIAL - Dados do usuário */
 const usuario = JSON.parse(localStorage.getItem('usuario')) || {
     name:'José Victor Silva de Jesus',
     photo:'assets/imagens/logo-por_cuadrado.jpeg',
     projeto:'PCI Usiminas'
 };
 
-// Cabeçalho
 const userPhoto = document.getElementById('userPhoto');
 const userName = document.getElementById('userName');
 const userProject = document.getElementById('userProject');
@@ -151,8 +161,9 @@ const projectMessage = document.getElementById('projectMessage');
 userName.innerText = usuario.name;
 userProject.innerText = usuario.projeto;
 userPhoto.style.backgroundImage = `url('${usuario.photo}')`;
+/* POINT END - Dados do usuário */
 
-// Upload de foto
+/* POINT INITIAL - Upload e alteração da foto */
 userPhoto.addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', e => {
     const file = e.target.files[0];
@@ -161,16 +172,16 @@ fileInput.addEventListener('change', e => {
         reader.onload = () => {
             userPhoto.style.backgroundImage = `url('${reader.result}')`;
             usuario.photo = reader.result;
-            localStorage.setItem('usuario', JSON.stringify(usuario)); // salva foto
+            localStorage.setItem('usuario', JSON.stringify(usuario));
         };
         reader.readAsDataURL(file);
     }
 });
+/* POINT END - Upload e alteração da foto */
 
-// Mostrar card ao clicar no nome do projeto
+/* POINT INITIAL - Seleção de projeto */
 userProject.addEventListener('click', () => { projectCard.style.display = 'block'; });
 
-// Seleção de projeto com restrição
 const projetosAutorizados = ['PCI Usiminas','MOA Usiminas'];
 
 confirmBtn.addEventListener('click', () => {
@@ -184,7 +195,7 @@ confirmBtn.addEventListener('click', () => {
         if(projetosAutorizados.includes(projetoEscolhido)){
             usuario.projeto = projetoEscolhido;
             userProject.innerText = projetoEscolhido;
-            localStorage.setItem('usuario', JSON.stringify(usuario)); // salva projeto
+            localStorage.setItem('usuario', JSON.stringify(usuario));
             projectMessage.innerHTML = '<span style="color:green;">✔ Projeto atualizado com sucesso!</span>';
             projectCard.style.display = 'none';
         } else {
@@ -192,12 +203,14 @@ confirmBtn.addEventListener('click', () => {
         }
     },1500);
 });
+/* POINT END - Seleção de projeto */
 
-// Logout
+/* POINT INITIAL - Logout e acesso dashboards */
 function logout() { localStorage.removeItem('usuario'); window.location.href='index.html'; }
 function accessDashboard(page) { window.location.href = page; }
+/* POINT END - Logout e acesso dashboards */
 
-// Dashboard info
+/* POINT INITIAL - Dashboards e mini-gráficos */
 const dashboardInfo = {
     "PYCP": { desc:"Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.", page:"pycp.html" },
     "RH": { desc:"Controle de efetivo, folha de pagamento e indicadores financeiros.", page:"rh.html" },
@@ -250,6 +263,7 @@ function updateMiniCharts(dashboard){
 
 // Inicializa com PYCP
 updateMiniCharts('PYCP');
+/* POINT END - Dashboards e mini-gráficos */
 </script>
 </body>
 </html>
