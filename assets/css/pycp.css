@@ -1,0 +1,66 @@
+/* POINT INITIAL - pycp.css */
+
+/* Cabeçalho do dashboard */
+main header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+main header h2 {
+    font-size: 20px;
+    color: #004080;
+}
+
+#backBtn {
+    padding: 8px 16px;
+    background: #004080;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#backBtn:hover {
+    background: #0066cc;
+}
+
+/* Container principal dos cards */
+.main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Card de gráfico */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card p {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* Canvas para gráficos */
+.card canvas {
+    width: 100% !important;
+    height: 200px !important;
+}
+
+/* Diferentes cores para indicadores do PYCP */
+#chartSTD { border-top: 3px solid #004080; }
+#chartHH { border-top: 3px solid #0066cc; }
+#chartCusto { border-top: 3px solid #0099ff; }
+#chartMedicao { border-top: 3px solid #00ccff; }
+
+/* POINT END - pycp.css */
