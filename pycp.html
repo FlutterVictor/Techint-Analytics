@@ -12,12 +12,10 @@ header { background:#004080; color:white; padding:15px 20px; display:flex; justi
 header h2 { margin:0; font-size:20px; }
 header .controls button { margin-left:10px; padding:6px 12px; border:none; border-radius:6px; background:#0066cc; color:white; cursor:pointer; }
 header .controls button:hover { background:#0080ff; }
-
 .main { padding:20px; }
 .card { background:white; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
 .mini-charts { display:flex; gap:10px; flex-wrap:wrap; }
 .mini-charts canvas { background:#f9f9f9; border-radius:6px; }
-
 .user-footer { position:fixed; bottom:20px; right:20px; display:flex; align-items:center; gap:10px; background:white; padding:10px 15px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
 .user-footer img { width:50px; height:50px; border-radius:50%; object-fit:cover; }
 .user-footer div { display:flex; flex-direction:column; }
@@ -26,8 +24,6 @@ header .controls button:hover { background:#0080ff; }
 </style>
 </head>
 <body>
-
-<!-- TOPO -->
 <header>
 <h2>Sistema de Gerenciamento PYCP</h2>
 <div class="controls">
@@ -37,7 +33,6 @@ header .controls button:hover { background:#0080ff; }
 </div>
 </header>
 
-<!-- CORPO -->
 <div class="main">
 <div class="card">
 <p>Visualização de STD, HH consumidos, Custos Planejado x Realizado, Medição % concluída.</p>
@@ -50,7 +45,6 @@ header .controls button:hover { background:#0080ff; }
 </div>
 </div>
 
-<!-- USUÁRIO -->
 <div class="user-footer">
 <img id="userPhoto" src="assets/imagens/logo-por_cuadrado.jpeg" alt="Foto do Usuário">
 <div>
@@ -60,11 +54,15 @@ header .controls button:hover { background:#0080ff; }
 </div>
 
 <script>
-const dataMock = [10,12,8,15,9]; const colors='#004080';
-['chartSTD','chartHH','chartCusto','chartMedicao'].forEach(id=>{
+const dataSTD = [10,12,8,15,9];
+const dataHH = [5,7,6,8,5];
+const dataCusto = [100,120,90,110,95];
+const dataMedicao = [60,70,50,80,65];
+['chartSTD','chartHH','chartCusto','chartMedicao'].forEach((id,index)=>{
+let dataArr=[dataSTD,dataHH,dataCusto,dataMedicao][index];
 new Chart(document.getElementById(id),{
 type:'bar',
-data:{labels:['A1','A2','A3','A4','A5'],datasets:[{data:dataMock,backgroundColor:colors}]},
+data:{labels:['A1','A2','A3','A4','A5'],datasets:[{data:dataArr,backgroundColor:'#004080'}]},
 options:{responsive:false,plugins:{legend:{display:false}},scales:{x:{display:true},y:{display:true}}}
 });
 });
