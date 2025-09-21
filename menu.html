@@ -1,269 +1,51 @@
+<!-- POINT INITIAL - menu.html atualizado -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Techint Engenharia e Construção</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-body { display:flex; height:100vh; background-color:#f4f6f8; }
-
-/* POINT INITIAL - Sidebar */
-.sidebar {
-    width:250px;
-    background-color:#004080;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    padding:20px;
-}
-.sidebar h2 { margin-bottom:20px; font-size:1.2em; }
-.dashboard-item {
-    padding:12px 15px;
-    margin-bottom:8px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s;
-}
-.dashboard-item:hover, .dashboard-item.active { background-color:#0066cc; }
-.sidebar .logout-btn {
-    margin-top:auto;
-    background-color:#cc0000;
-    border:none;
-    padding:10px;
-    border-radius:6px;
-    cursor:pointer;
-    transition:background 0.3s;
-}
-.sidebar .logout-btn:hover { background-color:#ff3333; }
-/* POINT END - Sidebar */
-
-/* POINT INITIAL - Main */
-.main { flex:1; padding:30px; overflow-y:auto; }
-header { margin-bottom:20px; display:flex; align-items:center; gap:15px; position:relative; }
-.user-photo { width:50px; height:50px; border-radius:50%; background-color:#c4c4c4; background-size:cover; background-position:center; cursor:pointer; }
-.user-name { font-weight:bold; font-size:1.1em; color:#004080; cursor:pointer; }
-.user-role { color:#6699cc; font-size:0.9em; }
-.user-project { color:#004080; font-size:0.9em; margin-top:2px; cursor:pointer; }
-
-/* POINT INITIAL - Card de seleção de projeto */
-#projectCard {
-    display:none;
-    position:absolute;
-    top:80px;
-    left:90px;
-    background:white;
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-    z-index:10;
-}
-#projectCard h4 { margin-bottom:10px; }
-#projectCard div { margin-bottom:8px; }
-/* POINT END - Card de seleção de projeto */
-
-/* POINT INITIAL - Mini-gráficos e preview */
-.preview-card {
-    background-color:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 4px 8px rgba(0,0,0,0.1);
-    max-width:700px;
-}
-.preview-card h3 { margin-bottom:10px; color:#004080; }
-.preview-card p { margin-bottom:15px; color:#333; }
-.mini-charts { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px; }
-.mini-charts canvas { border-radius:6px; background:#f9f9f9; }
-.access-btn { padding:10px 20px; border:none; border-radius:6px; background-color:#004080; color:white; cursor:pointer; }
-.access-btn:hover { background-color:#0066cc; }
-/* POINT END - Mini-gráficos e preview */
-
-/* POINT INITIAL - Spinner e erro */
-.spinner { border: 4px solid #f3f3f3; border-top: 4px solid #004080; border-radius: 50%; width:24px; height:24px; animation:spin 1s linear infinite; display:inline-block; vertical-align: middle;}
-@keyframes spin {0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);}}
-.error-icon { color:red; font-weight:bold; margin-left:5px; }
-#fileInput { display:none; }
-/* POINT END - Spinner e erro */
-</style>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/dashboards.css">
 </head>
 <body>
 
-<!-- POINT INITIAL - Sidebar HTML -->
-<div class="sidebar">
-    <h2>Techint Engenharia e Construção</h2>
-    <div class="dashboard-item active" data-dashboard="PYCP">PYCP</div>
-    <div class="dashboard-item" data-dashboard="RH">RH</div>
-    <div class="dashboard-item" data-dashboard="Produção">Produção</div>
-    <div class="dashboard-item" data-dashboard="Suprimentos">Suprimentos</div>
-    <div class="dashboard-item" data-dashboard="QSMS">QSMS</div>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-</div>
-<!-- POINT END - Sidebar HTML -->
-
-<!-- POINT INITIAL - Main HTML -->
-<div class="main">
-    <header>
-        <div class="user-photo" id="userPhoto" title="Clique para alterar foto"></div>
-        <div>
-            <div class="user-name" id="userName"></div>
-            <div class="user-role">Analista de Dados Jr</div>
-            <div class="user-project" id="userProject" title="Clique para mudar de projeto"></div>
-        </div>
-        <input type="file" id="fileInput" accept="image/*">
-
-        <!-- POINT INITIAL - Card de projeto -->
-        <div id="projectCard">
-            <h4>Selecione o Projeto</h4>
-            <div><input type="radio" name="projeto" id="projetoPCI" value="PCI Usiminas"><label for="projetoPCI">PCI Usiminas (1087 colaboradores)</label></div>
-            <div><input type="radio" name="projeto" id="projetoMOA" value="MOA Usiminas"><label for="projetoMOA">MOA Usiminas (355 colaboradores)</label></div>
-            <div><input type="radio" name="projeto" id="projetoRestrito" value="Projeto restrito"><label for="projetoRestrito">Projeto restrito</label></div>
-            <button id="confirmProjectBtn" style="margin-top:10px; padding:6px 12px; border:none; border-radius:6px; background-color:#004080; color:white; cursor:pointer;">Confirmar</button>
-            <div id="projectMessage" style="margin-top:10px;"></div>
-        </div>
-        <!-- POINT END - Card de projeto -->
-    </header>
-
-    <!-- POINT INITIAL - Preview Dashboards -->
-    <div class="preview-card" id="previewCard">
-        <h3>Sistema de Gerenciamento PYCP</h3>
-        <p>Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.</p>
-
-        <div class="mini-charts">
-            <canvas id="miniSTD" width="120" height="80"></canvas>
-            <canvas id="miniHH" width="120" height="80"></canvas>
-            <canvas id="miniCusto" width="120" height="80"></canvas>
-            <canvas id="miniMedicao" width="120" height="80"></canvas>
-        </div>
-
-        <button class="access-btn" onclick="accessDashboard('pycp.html')">Acessar PYCP</button>
+<!-- Menu Lateral -->
+<aside id="sidebar">
+    <div class="logo">
+        <img src="assets/imagens/logo_empresa.png" alt="Logo Empresa">
     </div>
-    <!-- POINT END - Preview Dashboards -->
-</div>
-<!-- POINT END - Main HTML -->
+    <h3>Techint Engenharia e Construção</h3>
+    <ul id="dashboardList">
+        <li data-dashboard="pycp">PYCP</li>
+        <li data-dashboard="rh">RH</li>
+        <li data-dashboard="producao">Produção</li>
+        <li data-dashboard="suprimentos">Suprimentos</li>
+        <li data-dashboard="qsms">QSMS</li>
+    </ul>
+    <div class="user-section">
+        <img id="userPhoto" src="assets/imagens/logo-por_cuadrado.jpeg" alt="Foto Usuário">
+        <div>
+            <span class="name">José Victor Silva de Jesus</span>
+            <span class="role">Analista de Dados Jr</span>
+        </div>
+    </div>
+    <button id="logoutBtn">Logout</button>
+</aside>
 
-<script>
-/* POINT INITIAL - Dados do usuário */
-const usuario = JSON.parse(localStorage.getItem('usuario')) || {
-    name:'José Victor Silva de Jesus',
-    photo:'assets/imagens/logo-por_cuadrado.jpeg',
-    projeto:'PCI Usiminas'
-};
+<!-- Conteúdo Principal -->
+<main id="mainContent">
+    <h2>Selecione um Dashboard</h2>
+    <div id="previewCard">
+        <p>Aqui será exibido o mockup prévio do dashboard selecionado</p>
+        <button id="accessBtn">Acessar Dashboard</button>
+    </div>
+</main>
 
-const userPhoto = document.getElementById('userPhoto');
-const userName = document.getElementById('userName');
-const userProject = document.getElementById('userProject');
-const fileInput = document.getElementById('fileInput');
-const projectCard = document.getElementById('projectCard');
-const confirmBtn = document.getElementById('confirmProjectBtn');
-const projectMessage = document.getElementById('projectMessage');
+<script src="assets/libs/chart.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/dashboards.js"></script>
 
-userName.innerText = usuario.name;
-userProject.innerText = usuario.projeto;
-userPhoto.style.backgroundImage = `url('${usuario.photo}')`;
-/* POINT END - Dados do usuário */
-
-/* POINT INITIAL - Upload e alteração da foto */
-userPhoto.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if(file){
-        const reader = new FileReader();
-        reader.onload = () => {
-            userPhoto.style.backgroundImage = `url('${reader.result}')`;
-            usuario.photo = reader.result;
-            localStorage.setItem('usuario', JSON.stringify(usuario));
-        };
-        reader.readAsDataURL(file);
-    }
-});
-/* POINT END - Upload e alteração da foto */
-
-/* POINT INITIAL - Seleção de projeto */
-userProject.addEventListener('click', () => { projectCard.style.display = 'block'; });
-
-const projetosAutorizados = ['PCI Usiminas','MOA Usiminas'];
-
-confirmBtn.addEventListener('click', () => {
-    const selected = document.querySelector('input[name="projeto"]:checked');
-    if(!selected) { alert('Selecione um projeto'); return; }
-
-    const projetoEscolhido = selected.value;
-    projectMessage.innerHTML = '<span class="spinner"></span> Atualizando...';
-
-    setTimeout(()=>{
-        if(projetosAutorizados.includes(projetoEscolhido)){
-            usuario.projeto = projetoEscolhido;
-            userProject.innerText = projetoEscolhido;
-            localStorage.setItem('usuario', JSON.stringify(usuario));
-            projectMessage.innerHTML = '<span style="color:green;">✔ Projeto atualizado com sucesso!</span>';
-            projectCard.style.display = 'none';
-        } else {
-            projectMessage.innerHTML = 'Acesso restrito, entre em contato com o administrador ou superior <span class="error-icon">✖</span>';
-        }
-    },1500);
-});
-/* POINT END - Seleção de projeto */
-
-/* POINT INITIAL - Logout e acesso dashboards */
-function logout() { localStorage.removeItem('usuario'); window.location.href='index.html'; }
-function accessDashboard(page) { window.location.href = page; }
-/* POINT END - Logout e acesso dashboards */
-
-/* POINT INITIAL - Dashboards e mini-gráficos */
-const dashboardInfo = {
-    "PYCP": { desc:"Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.", page:"pycp.html" },
-    "RH": { desc:"Controle de efetivo, folha de pagamento e indicadores financeiros.", page:"rh.html" },
-    "Produção": { desc:"Acompanhe Elétrica, Mecânica, Solda, Pintura, Tubulação, Estruturas e demais setores produtivos.", page:"producao.html" },
-    "Suprimentos": { desc:"Controle de estoque, consumo de materiais e status de pedidos.", page:"suprimentos.html" },
-    "QSMS": { desc:"Monitore TF, TRIR, Near Misses, auditorias e inspeções.", page:"qsms.html" }
-};
-
-const dashboardItems = document.querySelectorAll('.dashboard-item');
-const previewCard = document.getElementById('previewCard');
-
-dashboardItems.forEach(item => {
-    item.addEventListener('click', () => {
-        dashboardItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-
-        const dashboard = item.dataset.dashboard;
-        previewCard.querySelector('h3').innerText = `Sistema de Gerenciamento ${dashboard}`;
-        previewCard.querySelector('p').innerText = dashboardInfo[dashboard].desc;
-        previewCard.querySelector('.access-btn').innerText = `Acessar ${dashboard}`;
-        previewCard.querySelector('.access-btn').setAttribute('onclick', `accessDashboard('${dashboardInfo[dashboard].page}')`);
-
-        updateMiniCharts(dashboard);
-    });
-});
-
-// Mini-gráficos
-let miniCharts = {};
-function createMiniChart(ctx, type, data, options={}) {
-    return new Chart(ctx, { type, data, options });
-}
-function updateMiniCharts(dashboard){
-    const miniData = {
-        "PYCP": { STD:[1.2,0.9,1.5,1.1,0.8], HH:[10,12,8,15,9], Custo:[10000,8000,12000,7000,5000], Medicao:[80,60,50,90,70] },
-        "RH": { STD:[0.5,0.7,0.6,0.8,0.7], HH:[5,6,4,7,5], Custo:[3000,4000,2500,3500,3000], Medicao:[90,85,80,95,88] },
-        "Produção": { STD:[1,1.2,0.8,1.1,1.3], HH:[20,18,22,17,19], Custo:[15000,12000,17000,14000,16000], Medicao:[70,75,65,80,78] },
-        "Suprimentos": { STD:[0.3,0.5,0.4,0.6,0.5], HH:[2,3,1,4,2], Custo:[500,700,400,600,500], Medicao:[95,92,90,97,94] },
-        "QSMS": { STD:[0.2,0.3,0.1,0.4,0.2], HH:[1,2,1,3,1], Custo:[100,200,150,250,180], Medicao:[98,96,97,99,95] }
-    };
-    const ctxIds = ['miniSTD','miniHH','miniCusto','miniMedicao'];
-    const types = ['line','bar','bar','doughnut'];
-    ctxIds.forEach((id,i)=>{
-        if(miniCharts[id]) miniCharts[id].destroy();
-        miniCharts[id] = createMiniChart(document.getElementById(id), types[i], {
-            labels:['A1','A2','A3','A4','A5'],
-            datasets:[{data:miniData[dashboard][Object.keys(miniData[dashboard])[i]], backgroundColor:'#004080', borderColor:'#004080', fill:types[i]=='line'}]
-        }, { responsive:false, plugins:{ legend:{display:false} }, scales:{ x:{display:false}, y:{display:false} } });
-    });
-}
-
-// Inicializa com PYCP
-updateMiniCharts('PYCP');
-/* POINT END - Dashboards e mini-gráficos */
-</script>
 </body>
 </html>
+<!-- POINT END - menu.html atualizado -->
