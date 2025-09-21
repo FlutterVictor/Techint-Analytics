@@ -1,86 +1,104 @@
 // POINT INITIAL - main.js
 
-// Dados do usuário
+// Usuário simulado
 const user = {
-    name: "José Victor Silva de Jesus",
-    role: "Analista de Dados Jr",
-    photo: "assets/imagens/logo-por_cuadrado.jpeg",
-    authorizedProjects: ["PCI Usiminas","MOA Usiminas"] // projetos liberados
+    nome: "José Victor Silva de Jesus",
+    cargo: "Analista de Dados Jr",
+    foto: "assets/imagens/logo-por_cuadrado.jpeg"
 };
 
-// Referências
-const userImg = document.getElementById("userPhoto");
-const userName = document.querySelector(".user-section .name");
-const userRole = document.querySelector(".user-section .role");
-const dashboardList = document.querySelectorAll("#dashboardList li");
+// Projetos disponíveis
+const projetos = [
+    { nome: "Projeto PCI Usiminas", colaboradores: 1087, acesso: true },
+    { nome: "Projeto MOA Usiminas", colaboradores: 355, acesso: true },
+    { nome: "Projeto Restrito", colaboradores: 50, acesso: false }
+];
+
+// ------------------ Atualiza usuário ------------------
+const userPhoto = document.getElementById("userPhoto");
+const userName = document.querySelector(".user-section-top .name");
+const userRole = document.querySelector(".user-section-top .role");
+
+if(userPhoto) userPhoto.src = user.foto;
+if(userName) userName.textContent = user.nome;
+if(userRole) userRole.textContent = user.cargo;
+
+// ------------------ Seleção de Dashboards ------------------
+const dashboardItems = document.querySelectorAll("#dashboardList li");
 const previewCard = document.getElementById("previewCard");
+const accessBtn = document.getElementById("accessBtn");
 
-// Atualiza usuário
-function loadUser() {
-    userImg.src = user.photo;
-    userName.textContent = user.name;
-    userRole.textContent = user.role;
-}
+dashboardItems.forEach(item => {
+    item.addEventListener("click", () => {
+        const dashboardName = item.textContent;
+        if(previewCard) {
+            previewCard.querySelector("p").textContent = `Pré-visualização do Dashboard ${dashboardName}`;
+            accessBtn.textContent = `Acessar ${dashboardName}`;
+        }
+    });
+});
 
-// Controle de projeto
-function selectProject(dashboardName) {
-    // Cria card de seleção
+// ------------------ Seleção de Projetos ------------------
+function showProjectCard() {
     let projectCard = document.getElementById("projectCard");
-    if(!projectCard){
+    if(!projectCard) {
         projectCard = document.createElement("div");
         projectCard.id = "projectCard";
+
+        projetos.forEach((proj, idx) => {
+            const btn = document.createElement("button");
+            btn.textContent = proj.nome;
+            btn.addEventListener("click", () => selectProject(idx));
+            projectCard.appendChild(btn);
+        });
+
         previewCard.appendChild(projectCard);
     }
-    projectCard.innerHTML = "<h3>Selecione o projeto para "+dashboardName+"</h3>";
-    user.authorizedProjects.push("Projeto restrito"); // simula projeto restrito
-    user.authorizedProjects.forEach(proj=>{
-        let btn = document.createElement("button");
-        btn.textContent = proj;
-        btn.onclick = ()=>{
-            if(proj==="Projeto restrito"){
-                showRestricted();
-            } else {
-                showLoading(proj);
-            }
-        };
-        projectCard.appendChild(btn);
-    });
     projectCard.style.display = "block";
 }
 
-// Mensagem de acesso restrito
-function showRestricted(){
-    let msg = document.getElementById("restrictedMsg");
-    if(!msg){
-        msg = document.createElement("div");
-        msg.id="restrictedMsg";
-        previewCard.appendChild(msg);
-    }
-    msg.textContent = "Acesso restrito, entre em contato com o administrador do sistema ou seu superior direto para solicitar acesso.";
-    msg.style.display="block";
+function selectProject(idx) {
+    const proj = projetos[idx];
+    const projectCard = document.getElementById("projectCard");
+
+    // Limpa mensagens anteriores
+    const oldMsg = document.getElementById("restrictedMsg");
+    if(oldMsg) oldMsg.remove();
+
+    // Cria loader
+    const loader = document.createElement("div");
+    loader.classList.add("loader");
+    projectCard.appendChild(loader);
+
+    setTimeout(() => {
+        loader.remove();
+        if(proj.acesso) {
+            alert(`Projeto "${proj.nome}" selecionado com sucesso!`);
+            projectCard.style.display = "none";
+            // Aqui você pode atualizar dados do dashboard conforme o projeto
+        } else {
+            const msg = document.createElement("div");
+            msg.id = "restrictedMsg";
+            msg.textContent = "Acesso restrito, entre em contato com o administrador do sistema ou seu superior direto para solicitar acesso";
+            projectCard.appendChild(msg);
+        }
+    }, 1500);
 }
 
-// Simula atualização de projeto
-function showLoading(project){
-    previewCard.innerHTML="<p>Atualizando "+project+" ...</p><div class='loader'></div>";
-    setTimeout(()=>{ 
-        previewCard.innerHTML="<p>Dashboard atualizado para "+project+"</p><button id='accessBtn'>Acessar Dashboard</button>";
-    },1500);
-}
-
-// Evento dashboards
-dashboardList.forEach(item=>{
-    item.addEventListener("click",()=>{
-        selectProject(item.dataset.dashboard);
+// ------------------ Botão Acessar Dashboard ------------------
+if(accessBtn){
+    accessBtn.addEventListener("click", () => {
+        showProjectCard();
     });
-});
+}
 
-// Logout
-document.getElementById("logoutBtn").addEventListener("click",()=>{
-    alert("Logout efetuado");
-});
-
-// Inicializa
-loadUser();
+// ------------------ Logout ------------------
+const logoutBtn = document.getElementById("logoutBtn");
+if(logoutBtn){
+    logoutBtn.addEventListener("click", () => {
+        alert("Logout realizado!");
+        // Aqui você pode redirecionar para login ou limpar sessão
+    });
+}
 
 // POINT END - main.js
