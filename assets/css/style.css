@@ -1,9 +1,15 @@
 /* POINT INITIAL - style.css */
 
 /* Reset e corpo */
-body { margin:0; padding:0; font-family: Arial, sans-serif; background:#f4f6f8; display:flex; }
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    display: flex;
+}
 
-/* Menu lateral */
+/* ------------------ Menu Lateral ------------------ */
 #sidebar {
     width: 250px;
     background: #004080;
@@ -15,88 +21,162 @@ body { margin:0; padding:0; font-family: Arial, sans-serif; background:#f4f6f8; 
     height: 100vh;
 }
 
-#sidebar .logo img { width: 100%; border-radius: 8px; margin-bottom: 20px; }
-
-#sidebar h3 { font-size: 18px; margin-bottom: 20px; }
-
-#dashboardList { list-style:none; padding:0; margin:0; flex-grow:1; }
-#dashboardList li { padding: 12px 10px; margin-bottom:8px; background:#0066cc; border-radius:6px; cursor:pointer; transition:0.3s; }
-#dashboardList li:hover { background:#0080ff; }
-
-/* Seção do usuário */
-.user-section {
-    display:flex; 
-    align-items:center; 
-    margin-top:auto; 
-    padding-top:20px;
-    border-top: 1px solid rgba(255,255,255,0.2);
+#sidebar .logo img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
-.user-section img {
-    width:50px; height:50px; border-radius:50%; object-fit:cover; margin-right:10px;
+#sidebar h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.user-section .name { font-weight:bold; color:white; }
-.user-section .role { font-size:12px; color:rgba(255,255,255,0.7); }
+#dashboardList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+#dashboardList li {
+    padding: 12px 10px;
+    margin-bottom: 8px;
+    background: #0066cc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+#dashboardList li:hover {
+    background: #0080ff;
+}
 
 /* Botão de logout */
 #logoutBtn {
-    margin-top:20px;
-    padding:10px; 
-    background:#cc0000; 
-    border:none; 
-    border-radius:6px; 
-    color:white; 
-    cursor:pointer;
+    margin-top: 20px;
+    padding: 10px;
+    background: #cc0000;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
 }
-#logoutBtn:hover { background:#ff3333; }
 
-/* Conteúdo principal */
-#mainContent { flex-grow:1; padding:20px; }
-#mainContent h2 { margin-top:0; }
+#logoutBtn:hover {
+    background: #ff3333;
+}
+
+/* ------------------ Conteúdo Principal ------------------ */
+#mainContent {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+/* ------------------ Usuário no topo ------------------ */
+.user-section-top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-section-top img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.user-section-top .name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.user-section-top .role {
+    font-size: 13px;
+    color: gray;
+}
+
+/* ------------------ Preview Card ------------------ */
 #previewCard {
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    max-width:600px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
 }
+
 #previewCard button {
-    margin-top:15px;
-    padding:10px 20px;
-    border:none;
-    border-radius:6px;
-    background:#004080;
-    color:white;
-    cursor:pointer;
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #004080;
+    color: white;
+    cursor: pointer;
 }
-#previewCard button:hover { background:#0066cc; }
 
-/* Card de seleção de projeto */
+#previewCard button:hover {
+    background: #0066cc;
+}
+
+/* ------------------ Card de Seleção de Projeto ------------------ */
 #projectCard {
-    display:none;
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    margin-top:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    text-align:center;
+    display: none;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
-#projectCard button {
-    margin:10px;
-    padding:8px 16px;
-    border:none;
-    border-radius:6px;
-    background:#004080;
-    color:white;
-    cursor:pointer;
-}
-#projectCard button:hover { background:#0066cc; }
 
-/* Mensagem de acesso restrito */
-#restrictedMsg { color:red; font-weight:bold; margin-top:10px; display:none; }
+#projectCard button {
+    margin: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #004080;
+    color: white;
+    cursor: pointer;
+}
+
+#projectCard button:hover {
+    background: #0066cc;
+}
+
+/* ------------------ Mensagem de Acesso Restrito ------------------ */
+#restrictedMsg {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    display: none;
+}
+
+/* ------------------ Loader Simples ------------------ */
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #004080;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-top: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 /* POINT END - style.css */
