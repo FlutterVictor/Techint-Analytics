@@ -1,0 +1,55 @@
+<!-- POINT INITIAL - pycp.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PYCP - Techint</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family:Arial; background:#f4f6f8; margin:0; padding:20px; }
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+h2 { color:#004080; }
+button { padding:8px 16px; border:none; border-radius:6px; background:#004080; color:white; cursor:pointer; }
+button:hover { background:#0066cc; }
+.card { background:white; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+.mini-charts { display:flex; gap:10px; flex-wrap:wrap; }
+.mini-charts canvas { background:#f9f9f9; border-radius:6px; }
+</style>
+</head>
+<body>
+
+<header>
+    <h2>Sistema de Gerenciamento PYCP</h2>
+    <button onclick="goBack()">Voltar</button>
+</header>
+
+<div class="card">
+    <p>Visualização de STD, HH consumidos, Custos Planejado x Realizado, Medição % concluída.</p>
+    <div class="mini-charts">
+        <canvas id="chartSTD" width="150" height="100"></canvas>
+        <canvas id="chartHH" width="150" height="100"></canvas>
+        <canvas id="chartCusto" width="150" height="100"></canvas>
+        <canvas id="chartMedicao" width="150" height="100"></canvas>
+    </div>
+</div>
+
+<script>
+function goBack(){ window.location.href='menu.html'; }
+
+// Mini-gráficos mockup
+const dataMock = [10,12,8,15,9];
+const colors = '#004080';
+
+['chartSTD','chartHH','chartCusto','chartMedicao'].forEach(id=>{
+    new Chart(document.getElementById(id), {
+        type:'bar',
+        data:{ labels:['A1','A2','A3','A4','A5'], datasets:[{data:dataMock, backgroundColor:colors}] },
+        options:{ responsive:false, plugins:{ legend:{display:false} }, scales:{ x:{display:true}, y:{display:true} } }
+    });
+});
+</script>
+
+</body>
+</html>
+<!-- POINT END - pycp.html -->
