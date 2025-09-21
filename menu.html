@@ -1,156 +1,142 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Obras - Menu Lateral</title>
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-        body { display: flex; height: 100vh; background-color: #f4f6f8; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Techint Engenharia e Construção</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+body { display: flex; height: 100vh; background-color: #f4f6f8; }
 
-        /* Sidebar lateral */
-        .sidebar {
-            width: 250px;
-            background-color: #004080;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #004080;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.sidebar h2 { margin-bottom: 20px; font-size: 1.2em; }
+.dashboard-item {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.dashboard-item:hover, .dashboard-item.active { background-color: #0066cc; }
+.sidebar .logout-btn {
+    margin-top: auto;
+    background-color: #cc0000;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.sidebar .logout-btn:hover { background-color: #ff3333; }
 
-        .sidebar h2 { margin-bottom: 20px; font-size: 1.2em; }
-
-        .dashboard-item {
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .dashboard-item:hover, .dashboard-item.active {
-            background-color: #0066cc;
-        }
-
-        /* Área principal */
-        .main {
-            flex: 1;
-            padding: 30px;
-        }
-
-        .preview-card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            max-width: 600px;
-        }
-
-        .preview-card h3 { margin-bottom: 10px; color: #004080; }
-        .preview-card p { margin-bottom: 20px; color: #333; }
-        .access-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            background-color: #004080;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .access-btn:hover { background-color: #0066cc; }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .user-photo { width: 40px; height: 40px; border-radius: 50%; background-color: #c4c4c4; background-size: cover; background-position: center; }
-        .user-name { font-weight: bold; color: #004080; }
-        .logout-btn { background-color: #cc0000; border: none; padding: 8px 12px; border-radius: 6px; color: white; cursor: pointer; }
-        .logout-btn:hover { background-color: #ff3333; }
-    </style>
+/* Main */
+.main { flex: 1; padding: 30px; }
+header { margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
+.user-photo { width: 50px; height: 50px; border-radius: 50%; background-color: #c4c4c4; background-size: cover; background-position: center; cursor: pointer; }
+.user-name { font-weight: bold; font-size: 1.1em; color: #004080; }
+.preview-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 600px;
+}
+.preview-card h3 { margin-bottom: 10px; color: #004080; }
+.preview-card p { margin-bottom: 20px; color: #333; }
+.access-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #004080;
+    color: white;
+    cursor: pointer;
+}
+.access-btn:hover { background-color: #0066cc; }
+#fileInput { display: none; }
+</style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h2>Dashboards</h2>
+    <h2>Techint Engenharia e Construção</h2>
     <div class="dashboard-item active" data-dashboard="PYCP">PYCP</div>
     <div class="dashboard-item" data-dashboard="RH">RH</div>
     <div class="dashboard-item" data-dashboard="Produção">Produção</div>
     <div class="dashboard-item" data-dashboard="Suprimentos">Suprimentos</div>
     <div class="dashboard-item" data-dashboard="QSMS">QSMS</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
 <div class="main">
     <header>
-        <div class="user-info">
-            <div class="user-photo" id="userPhoto"></div>
-            <div class="user-name" id="userName"></div>
-        </div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="user-photo" id="userPhoto" title="Clique para alterar foto"></div>
+        <div class="user-name" id="userName"></div>
+        <input type="file" id="fileInput" accept="image/*">
     </header>
 
     <div class="preview-card" id="previewCard">
-        <h3>PYCP</h3>
-        <p>Dashboard de Planejamento, Custos e Medição. Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.</p>
+        <h3>Sistema de Gerenciamento PYCP</h3>
+        <p>Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.</p>
         <button class="access-btn" onclick="accessDashboard('pycp.html')">Acessar PYCP</button>
     </div>
 </div>
 
 <script>
-    // Mockup do usuário
-    const usuario = JSON.parse(localStorage.getItem('usuario')) || {name:'Victor Silva'};
-    document.getElementById('userName').innerText = usuario.name;
-    document.getElementById('userPhoto').style.backgroundImage = "url('assets/imagens/user.png')";
+    // Usuário mockup
+    const usuario = {
+        name: 'Usuário 1',
+        photo: 'assets/imagens/logo-por_cuadrado.jpeg'
+    };
 
-    function logout() {
-        localStorage.removeItem('usuario');
-        window.location.href = 'index.html';
-    }
+    const userPhoto = document.getElementById('userPhoto');
+    const userName = document.getElementById('userName');
+    const fileInput = document.getElementById('fileInput');
 
-    function accessDashboard(page) {
-        window.location.href = page;
-    }
+    userName.innerText = usuario.name;
+    userPhoto.style.backgroundImage = `url('${usuario.photo}')`;
 
-    // Atualização do preview conforme clique no menu
+    // Upload de foto
+    userPhoto.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                userPhoto.style.backgroundImage = `url('${reader.result}')`;
+                usuario.photo = reader.result; // atualizar objeto
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function logout() { localStorage.removeItem('usuario'); window.location.href='index.html'; }
+    function accessDashboard(page) { window.location.href = page; }
+
     const dashboardItems = document.querySelectorAll('.dashboard-item');
     const previewCard = document.getElementById('previewCard');
 
     const dashboardInfo = {
-        "PYCP": {
-            description: "Dashboard de Planejamento, Custos e Medição. Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.",
-            page: "pycp.html"
-        },
-        "RH": {
-            description: "Dashboard de Recursos Humanos e Finanças. Controle de efetivo, absenteísmo, folha de pagamento e indicadores financeiros.",
-            page: "rh.html"
-        },
-        "Produção": {
-            description: "Dashboard de Produção. Acompanhe Elétrica, Mecânica, Solda, Pintura, Tubulação, Estruturas e demais setores produtivos.",
-            page: "producao.html"
-        },
-        "Suprimentos": {
-            description: "Dashboard de Compras e Almoxarifado. Controle de estoque, consumo de materiais e status de pedidos.",
-            page: "suprimentos.html"
-        },
-        "QSMS": {
-            description: "Dashboard de Qualidade, Segurança, Meio Ambiente e Saúde. Monitore TF, TRIR, Near Misses, auditorias e inspeções.",
-            page: "qsms.html"
-        }
+        "PYCP": { description: "Visualize STD, HH consumidos, Custos Planejado x Realizado e Medição % concluída.", page: "pycp.html" },
+        "RH": { description: "Controle de efetivo, folha de pagamento e indicadores financeiros.", page: "rh.html" },
+        "Produção": { description: "Acompanhe Elétrica, Mecânica, Solda, Pintura, Tubulação, Estruturas e demais setores produtivos.", page: "producao.html" },
+        "Suprimentos": { description: "Controle de estoque, consumo de materiais e status de pedidos.", page: "suprimentos.html" },
+        "QSMS": { description: "Monitore TF, TRIR, Near Misses, auditorias e inspeções.", page: "qsms.html" }
     };
 
     dashboardItems.forEach(item => {
         item.addEventListener('click', () => {
-            // Remove active
             dashboardItems.forEach(i => i.classList.remove('active'));
             item.classList.add('active');
-
             const dashboard = item.dataset.dashboard;
-            previewCard.querySelector('h3').innerText = dashboard;
+            previewCard.querySelector('h3').innerText = `Sistema de Gerenciamento ${dashboard}`;
             previewCard.querySelector('p').innerText = dashboardInfo[dashboard].description;
             previewCard.querySelector('button').innerText = `Acessar ${dashboard}`;
             previewCard.querySelector('button').setAttribute('onclick', `accessDashboard('${dashboardInfo[dashboard].page}')`);
