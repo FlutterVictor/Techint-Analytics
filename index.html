@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Obras - Menu Principal</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        header {
+            background-color: #004080;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 40px 20px;
+            gap: 20px;
+        }
+
+        .setor-card {
+            background-color: white;
+            width: 250px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .setor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .setor-card h2 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .setor-card p {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Obras</h1>
+    <p>Selecione o setor que deseja acessar</p>
+</header>
+
+<main>
+    <!-- Pycp -->
+    <div class="setor-card" onclick="window.location.href='pycp.html'">
+        <h2>PYCP</h2>
+        <p>Planejamento, Custos e Medição</p>
+    </div>
+
+    <!-- RH -->
+    <div class="setor-card" onclick="window.location.href='rh.html'">
+        <h2>RH</h2>
+        <p>Recursos Humanos e Finanças</p>
+    </div>
+
+    <!-- Produção -->
+    <div class="setor-card" onclick="window.location.href='producao.html'">
+        <h2>Produção</h2>
+        <p>Elétrica, Mecânica, Solda, Pintura, Tubulação, Estruturas e mais</p>
+    </div>
+
+    <!-- Suprimentos -->
+    <div class="setor-card" onclick="window.location.href='suprimentos.html'">
+        <h2>Suprimentos</h2>
+        <p>Compras, Almoxarifado e Suprimentos</p>
+    </div>
+
+    <!-- QSMS -->
+    <div class="setor-card" onclick="window.location.href='qsms.html'">
+        <h2>QSMS</h2>
+        <p>Qualidade, Segurança, Meio Ambiente e Saúde</p>
+    </div>
+</main>
+
+</body>
+</html>
