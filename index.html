@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Obras - Menu Principal</title>
+    <title>Sistema de Obras - Login</title>
     <style>
         /* Reset básico */
         * {
@@ -15,97 +15,118 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f8;
-            color: #333;
-        }
-
-        header {
-            background-color: #004080;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2em;
-        }
-
-        main {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 40px 20px;
-            gap: 20px;
-        }
-
-        .setor-card {
-            background-color: white;
-            width: 250px;
-            height: 150px;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: white;
+            width: 400px;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        .login-container h2 {
             text-align: center;
+            margin-bottom: 20px;
+            color: #004080;
         }
 
-        .setor-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        .login-container .user-photo {
+            display: block;
+            margin: 0 auto 15px auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #c4c4c4;
+            background-image: url('assets/imagens/user.png');
+            background-size: cover;
+            background-position: center;
         }
 
-        .setor-card h2 {
-            margin-bottom: 10px;
-            font-size: 1.2em;
+        .login-container label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
         }
 
-        .setor-card p {
-            font-size: 0.9em;
-            color: #666;
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .login-container button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #004080;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-container button:hover {
+            background-color: #0066cc;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Sistema de Obras</h1>
-    <p>Selecione o setor que deseja acessar</p>
-</header>
+<div class="login-container">
+    <div class="user-photo"></div>
+    <h2>Sistema de Obras</h2>
 
-<main>
-    <!-- Pycp -->
-    <div class="setor-card" onclick="window.location.href='pycp.html'">
-        <h2>PYCP</h2>
-        <p>Planejamento, Custos e Medição</p>
-    </div>
+    <label for="username">Usuário</label>
+    <input type="text" id="username" placeholder="Digite seu usuário">
 
-    <!-- RH -->
-    <div class="setor-card" onclick="window.location.href='rh.html'">
-        <h2>RH</h2>
-        <p>Recursos Humanos e Finanças</p>
-    </div>
+    <label for="password">Senha</label>
+    <input type="password" id="password" placeholder="Digite sua senha">
 
-    <!-- Produção -->
-    <div class="setor-card" onclick="window.location.href='producao.html'">
-        <h2>Produção</h2>
-        <p>Elétrica, Mecânica, Solda, Pintura, Tubulação, Estruturas e mais</p>
-    </div>
+    <button onclick="login()">Entrar</button>
 
-    <!-- Suprimentos -->
-    <div class="setor-card" onclick="window.location.href='suprimentos.html'">
-        <h2>Suprimentos</h2>
-        <p>Compras, Almoxarifado e Suprimentos</p>
-    </div>
+    <div class="error-message" id="error">Usuário ou senha incorretos</div>
+</div>
 
-    <!-- QSMS -->
-    <div class="setor-card" onclick="window.location.href='qsms.html'">
-        <h2>QSMS</h2>
-        <p>Qualidade, Segurança, Meio Ambiente e Saúde</p>
-    </div>
-</main>
+<script>
+    // Mockup de usuários
+    const usuarios = [
+        {username: 'victor', password: '1234', name: 'Victor Silva', setor: 'Produção'},
+        {username: 'joana', password: 'abcd', name: 'Joana Souza', setor: 'RH'}
+    ];
+
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const error = document.getElementById('error');
+
+        const user = usuarios.find(u => u.username === username && u.password === password);
+
+        if(user) {
+            // Usuário correto, salvar dados temporariamente e redirecionar
+            localStorage.setItem('usuario', JSON.stringify(user));
+            window.location.href = 'menu.html';
+        } else {
+            error.style.display = 'block';
+        }
+    }
+</script>
 
 </body>
 </html>
