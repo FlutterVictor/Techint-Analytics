@@ -1,13 +1,4 @@
-/* POINT INITIAL - style.css */
-
-/* Reset e corpo */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    display: flex;
-}
+/* POINT INITIAL - style.css ajustes */
 
 /* ------------------ Menu Lateral ------------------ */
 #sidebar {
@@ -22,86 +13,49 @@ body {
 }
 
 #sidebar .logo img {
-    width: 100%;
+    width: 150px; /* diminui tamanho */
+    height: auto;
     border-radius: 8px;
     margin-bottom: 20px;
+    object-fit: contain;
 }
 
-#sidebar h3 {
-    font-size: 18px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#dashboardList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-}
-
-#dashboardList li {
-    padding: 12px 10px;
-    margin-bottom: 8px;
-    background: #0066cc;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
-    text-align: center;
-}
-
-#dashboardList li:hover {
-    background: #0080ff;
-}
-
-/* Botão de logout */
-#logoutBtn {
-    margin-top: 20px;
-    padding: 10px;
-    background: #cc0000;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-}
-
-#logoutBtn:hover {
-    background: #ff3333;
-}
-
-/* ------------------ Conteúdo Principal ------------------ */
-#mainContent {
-    flex-grow: 1;
-    padding: 20px;
-}
-
-/* ------------------ Usuário no topo ------------------ */
+/* ------------------ Usuário no topo sem card ------------------ */
 .user-section-top {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-    padding: 10px 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .user-section-top img {
-    width: 60px;
-    height: 60px;
+    width: 50px; /* menor tamanho */
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
-.user-section-top .name {
+.user-section-top .user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-section-top .user-info .name {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
 }
 
-.user-section-top .role {
-    font-size: 13px;
+.user-section-top .user-info .role {
+    font-size: 12px;
     color: gray;
+}
+
+.user-section-top .user-info .project {
+    font-size: 12px;
+    color: #004080;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 2px;
 }
 
 /* ------------------ Preview Card ------------------ */
@@ -109,7 +63,7 @@ body {
     background: white;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -136,13 +90,13 @@ body {
     background: white;
     padding: 20px;
     border-radius: 12px;
-    margin-top: 20px;
+    margin-top: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 #projectCard button {
-    margin: 10px;
+    margin: 8px;
     padding: 8px 16px;
     border: none;
     border-radius: 6px;
@@ -179,4 +133,4 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* POINT END - style.css */
+/* POINT END - style.css ajustes */
