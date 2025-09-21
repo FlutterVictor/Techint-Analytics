@@ -1,0 +1,77 @@
+<!-- POINT INITIAL - producao.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produção - Techint</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family:Arial; margin:0; padding:0; background:#f4f6f8; }
+header { background:#004080; color:white; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; }
+header h2 { margin:0; font-size:20px; }
+header .controls button { margin-left:10px; padding:6px 12px; border:none; border-radius:6px; background:#0066cc; color:white; cursor:pointer; }
+header .controls button:hover { background:#0080ff; }
+.main { padding:20px; }
+.card { background:white; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+.mini-charts { display:flex; gap:10px; flex-wrap:wrap; }
+.mini-charts canvas { background:#f9f9f9; border-radius:6px; }
+.user-footer { position:fixed; bottom:20px; right:20px; display:flex; align-items:center; gap:10px; background:white; padding:10px 15px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+.user-footer img { width:50px; height:50px; border-radius:50%; object-fit:cover; }
+.user-footer div { display:flex; flex-direction:column; }
+.user-footer div .name { font-weight:bold; color:#004080; }
+.user-footer div .role { font-size:12px; color:#777; }
+</style>
+</head>
+<body>
+<header>
+<h2>Sistema de Gerenciamento Produção</h2>
+<div class="controls">
+<button>Elétrica</button>
+<button>Solda</button>
+<button>Logística</button>
+</div>
+</header>
+
+<div class="main">
+<div class="card">
+<p>Acompanhe Elétrica, Mecânica, Solda, Pintura, Tubulação, Estruturas e demais setores produtivos.</p>
+<div class="mini-charts">
+<canvas id="chartEletrica" width="150" height="100"></canvas>
+<canvas id="chartMecanica" width="150" height="100"></canvas>
+<canvas id="chartSolda" width="150" height="100"></canvas>
+<canvas id="chartPintura" width="150" height="100"></canvas>
+<canvas id="chartTubulacao" width="150" height="100"></canvas>
+<canvas id="chartEstruturas" width="150" height="100"></canvas>
+</div>
+</div>
+</div>
+
+<div class="user-footer">
+<img src="assets/imagens/logo-por_cuadrado.jpeg" alt="Foto do Usuário">
+<div>
+<span class="name">José Victor Silva de Jesus</span>
+<span class="role">Analista de Dados Jr</span>
+</div>
+</div>
+
+<script>
+const chartsData = {
+chartEletrica:[50,60,55,70,65],
+chartMecanica:[40,50,45,55,50],
+chartSolda:[30,35,28,40,32],
+chartPintura:[20,25,22,30,28],
+chartTubulacao:[15,18,12,20,17],
+chartEstruturas:[10,12,8,15,11]
+};
+Object.keys(chartsData).forEach(id=>{
+new Chart(document.getElementById(id),{
+type:'bar',
+data:{labels:['S1','S2','S3','S4','S5'],datasets:[{data:chartsData[id],backgroundColor:'#004080'}]},
+options:{responsive:false,plugins:{legend:{display:false}},scales:{x:{display:true},y:{display:true}}}
+});
+});
+</script>
+</body>
+</html>
+<!-- POINT END - producao.html -->
