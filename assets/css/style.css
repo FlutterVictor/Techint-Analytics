@@ -1,0 +1,102 @@
+/* POINT INITIAL - style.css */
+
+/* Reset e corpo */
+body { margin:0; padding:0; font-family: Arial, sans-serif; background:#f4f6f8; display:flex; }
+
+/* Menu lateral */
+#sidebar {
+    width: 250px;
+    background: #004080;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+#sidebar .logo img { width: 100%; border-radius: 8px; margin-bottom: 20px; }
+
+#sidebar h3 { font-size: 18px; margin-bottom: 20px; }
+
+#dashboardList { list-style:none; padding:0; margin:0; flex-grow:1; }
+#dashboardList li { padding: 12px 10px; margin-bottom:8px; background:#0066cc; border-radius:6px; cursor:pointer; transition:0.3s; }
+#dashboardList li:hover { background:#0080ff; }
+
+/* Seção do usuário */
+.user-section {
+    display:flex; 
+    align-items:center; 
+    margin-top:auto; 
+    padding-top:20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.user-section img {
+    width:50px; height:50px; border-radius:50%; object-fit:cover; margin-right:10px;
+}
+
+.user-section .name { font-weight:bold; color:white; }
+.user-section .role { font-size:12px; color:rgba(255,255,255,0.7); }
+
+/* Botão de logout */
+#logoutBtn {
+    margin-top:20px;
+    padding:10px; 
+    background:#cc0000; 
+    border:none; 
+    border-radius:6px; 
+    color:white; 
+    cursor:pointer;
+}
+#logoutBtn:hover { background:#ff3333; }
+
+/* Conteúdo principal */
+#mainContent { flex-grow:1; padding:20px; }
+#mainContent h2 { margin-top:0; }
+#previewCard {
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    max-width:600px;
+}
+#previewCard button {
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    background:#004080;
+    color:white;
+    cursor:pointer;
+}
+#previewCard button:hover { background:#0066cc; }
+
+/* Card de seleção de projeto */
+#projectCard {
+    display:none;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-top:20px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    text-align:center;
+}
+#projectCard button {
+    margin:10px;
+    padding:8px 16px;
+    border:none;
+    border-radius:6px;
+    background:#004080;
+    color:white;
+    cursor:pointer;
+}
+#projectCard button:hover { background:#0066cc; }
+
+/* Mensagem de acesso restrito */
+#restrictedMsg { color:red; font-weight:bold; margin-top:10px; display:none; }
+
+/* POINT END - style.css */
