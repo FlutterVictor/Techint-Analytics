@@ -1,8 +1,16 @@
-/* POINT INITIAL - style.css ajustes */
+/* POINT INITIAL - style.css reorganizado */
 
-/* ------------------ Menu Lateral ------------------ */
+/* Reset básico */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+}
+
+/* ------------------ Menu lateral ------------------ */
 #sidebar {
-    width: 250px;
+    width: 220px;
     background: #004080;
     color: white;
     display: flex;
@@ -13,26 +21,77 @@
 }
 
 #sidebar .logo img {
-    width: 150px; /* diminui tamanho */
+    width: 120px;
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto;
+    display: block;
     object-fit: contain;
 }
 
-/* ------------------ Usuário no topo sem card ------------------ */
+#dashboardList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+#dashboardList li {
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #0066cc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+#dashboardList li:hover {
+    background: #0080ff;
+}
+
+#logoutBtn {
+    padding: 10px;
+    background: #cc0000;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+#logoutBtn:hover {
+    background: #ff3333;
+}
+
+/* ------------------ Conteúdo principal ------------------ */
+#mainContent {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: #f4f6f8;
+}
+
+/* ------------------ Usuário topo ------------------ */
 .user-section-top {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .user-section-top img {
-    width: 50px; /* menor tamanho */
+    width: 50px;
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
 .user-section-top .user-info {
@@ -40,17 +99,17 @@
     flex-direction: column;
 }
 
-.user-section-top .user-info .name {
+.user-section-top .name {
     font-weight: bold;
     font-size: 14px;
 }
 
-.user-section-top .user-info .role {
+.user-section-top .role {
     font-size: 12px;
     color: gray;
 }
 
-.user-section-top .user-info .project {
+.user-section-top .project {
     font-size: 12px;
     color: #004080;
     cursor: pointer;
@@ -68,10 +127,16 @@
     flex-direction: column;
     align-items: center;
     max-width: 600px;
+    margin: auto;
+}
+
+#previewCard p {
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 #previewCard button {
-    margin-top: 15px;
     padding: 10px 20px;
     border: none;
     border-radius: 6px;
@@ -84,19 +149,19 @@
     background: #0066cc;
 }
 
-/* ------------------ Card de Seleção de Projeto ------------------ */
+/* ------------------ Card de seleção de projeto ------------------ */
 #projectCard {
     display: none;
     background: white;
-    padding: 20px;
+    padding: 15px;
     border-radius: 12px;
     margin-top: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     text-align: center;
 }
 
 #projectCard button {
-    margin: 8px;
+    margin: 5px;
     padding: 8px 16px;
     border: none;
     border-radius: 6px;
@@ -109,21 +174,20 @@
     background: #0066cc;
 }
 
-/* ------------------ Mensagem de Acesso Restrito ------------------ */
+/* ------------------ Mensagem de acesso restrito ------------------ */
 #restrictedMsg {
     color: red;
     font-weight: bold;
     margin-top: 10px;
-    display: none;
 }
 
-/* ------------------ Loader Simples ------------------ */
+/* ------------------ Loader ------------------ */
 .loader {
     border: 5px solid #f3f3f3;
     border-top: 5px solid #004080;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     animation: spin 1s linear infinite;
     margin-top: 15px;
 }
@@ -133,4 +197,4 @@
     100% { transform: rotate(360deg); }
 }
 
-/* POINT END - style.css ajustes */
+/* POINT END - style.css reorganizado */
