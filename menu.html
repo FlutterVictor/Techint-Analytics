@@ -1,58 +1,46 @@
-<!-- POINT INITIAL - menu.html atualizado -->
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Techint Engenharia e Construção</title>
-<link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="assets/css/dashboards.css">
-</head>
-<body>
-
-<!-- Menu Lateral -->
-<aside id="sidebar">
-    <div class="logo">
-        <img src="assets/imagens/logo_techint.png" alt="Logo Empresa">
+<div id="app">
+    <!-- Menu lateral -->
+    <div id="sidebar">
+        <div class="logo">
+            <img src="assets/imagens/logo_techint.png" alt="Logo Empresa">
+        </div>
+        <ul id="dashboardList">
+            <li data-dashboard="pycp">PYCP</li>
+            <li data-dashboard="rh">RH</li>
+            <li data-dashboard="producao">Produção</li>
+            <li data-dashboard="suprimentos">Suprimentos</li>
+            <li data-dashboard="qsms">QSMS</li>
+        </ul>
+        <button id="logoutBtn">Logout</button>
     </div>
-    <h3>Techint Engenharia e Construção</h3>
-    <ul id="dashboardList">
-        <li data-dashboard="pycp">PYCP</li>
-        <li data-dashboard="rh">RH</li>
-        <li data-dashboard="producao">Produção</li>
-        <li data-dashboard="suprimentos">Suprimentos</li>
-        <li data-dashboard="qsms">QSMS</li>
-    </ul>
 
-    <button id="logoutBtn">Logout</button>
-</aside>
+    <!-- Área principal -->
+    <div id="mainContent">
 
-<!-- Conteúdo Principal -->
-<main id="mainContent">
+        <!-- Usuário topo -->
+        <div class="user-section-top">
+            <img id="userPhoto" src="assets/imagens/logo-por_cuadrado.jpeg" alt="Foto Usuário">
+            <div class="user-info">
+                <span class="name">José Victor Silva de Jesus</span>
+                <span class="role">Analista de Dados Jr</span>
+                <span class="project" id="currentProject">Selecionar Projeto</span>
+            </div>
+        </div>
 
-<!-- POINT INITIAL - usuário topo -->
-<div class="user-section-top">
-    <img id="userPhoto" src="assets/imagens/logo-por_cuadrado.jpeg" alt="Foto Usuário">
-    <div class="user-info">
-        <span class="name">José Victor Silva de Jesus</span>
-        <span class="role">Analista de Dados Jr</span>
-        <span class="project" id="currentProject">Selecionar Projeto</span>
+        <!-- Prévia de dashboards -->
+        <div id="previewCard">
+            <p>Selecione um dashboard à esquerda</p>
+            <button id="accessBtn" style="display:none;">Acessar</button>
+        </div>
+
+        <!-- Card seleção de projeto -->
+        <div id="projectCard">
+            <p>Selecione o projeto:</p>
+            <button data-project="PCI Usiminas (1087 colaboradores)">PCI Usiminas</button>
+            <button data-project="MOA Usiminas (355 colaboradores)">MOA Usiminas</button>
+            <button data-project="Projeto Restrito">Projeto Restrito</button>
+            <div id="restrictedMsg" style="display:none;">Acesso restrito, entre em contato com o administrador do sistema ou seu superior direto para solicitar acesso.</div>
+            <div class="loader" style="display:none;"></div>
+        </div>
     </div>
 </div>
-<!-- POINT END - usuário topo -->
-
-    <h2>Selecione um Dashboard</h2>
-    <div id="previewCard">
-        <p>Aqui será exibido o mockup prévio do dashboard selecionado</p>
-        <button id="accessBtn">Acessar Dashboard</button>
-    </div>
-
-</main>
-
-<script src="assets/libs/chart.min.js"></script>
-<script src="assets/js/main.js"></script>
-<script src="assets/js/dashboards.js"></script>
-
-</body>
-</html>
-<!-- POINT END - menu.html atualizado -->
