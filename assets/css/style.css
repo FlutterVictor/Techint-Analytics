@@ -1,14 +1,10 @@
-/* POINT INITIAL - style.css reorganizado */
-
-/* Reset básico */
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
+/* Layout base */
+#app {
+    display: flex;
+    height: 100vh;
 }
 
-/* ------------------ Menu lateral ------------------ */
+/* Sidebar */
 #sidebar {
     width: 220px;
     background: #004080;
@@ -17,15 +13,12 @@ body, html {
     flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
-    height: 100vh;
 }
 
 #sidebar .logo img {
     width: 120px;
-    height: auto;
-    margin: 0 auto 20px auto;
     display: block;
-    object-fit: contain;
+    margin: 0 auto 20px auto;
 }
 
 #dashboardList {
@@ -41,7 +34,6 @@ body, html {
     background: #0066cc;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.3s;
     text-align: center;
 }
 
@@ -56,42 +48,35 @@ body, html {
     border-radius: 6px;
     color: white;
     cursor: pointer;
-    margin-top: auto;
 }
 
-#logoutBtn:hover {
-    background: #ff3333;
-}
-
-/* ------------------ Conteúdo principal ------------------ */
+/* Conteúdo principal */
 #mainContent {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    height: 100vh;
-    box-sizing: border-box;
-    overflow-y: auto;
     background: #f4f6f8;
+    overflow-y: auto;
 }
 
-/* ------------------ Usuário topo ------------------ */
+/* Usuário topo */
 .user-section-top {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
     background: white;
     padding: 10px 15px;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
 .user-section-top img {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 15px;
+    margin-right: 12px;
 }
 
 .user-section-top .user-info {
@@ -117,27 +102,22 @@ body, html {
     margin-top: 2px;
 }
 
-/* ------------------ Preview Card ------------------ */
+/* Prévia Dashboard */
 #previewCard {
     background: white;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 600px;
-    margin: auto;
+    text-align: center;
 }
 
 #previewCard p {
-    margin-bottom: 15px;
     font-size: 16px;
-    font-weight: bold;
+    margin-bottom: 15px;
 }
 
 #previewCard button {
-    padding: 10px 20px;
+    padding: 8px 16px;
     border: none;
     border-radius: 6px;
     background: #004080;
@@ -149,7 +129,7 @@ body, html {
     background: #0066cc;
 }
 
-/* ------------------ Card de seleção de projeto ------------------ */
+/* Seleção de projeto */
 #projectCard {
     display: none;
     background: white;
@@ -162,7 +142,7 @@ body, html {
 
 #projectCard button {
     margin: 5px;
-    padding: 8px 16px;
+    padding: 8px 14px;
     border: none;
     border-radius: 6px;
     background: #004080;
@@ -174,14 +154,12 @@ body, html {
     background: #0066cc;
 }
 
-/* ------------------ Mensagem de acesso restrito ------------------ */
 #restrictedMsg {
     color: red;
     font-weight: bold;
     margin-top: 10px;
 }
 
-/* ------------------ Loader ------------------ */
 .loader {
     border: 5px solid #f3f3f3;
     border-top: 5px solid #004080;
@@ -189,12 +167,9 @@ body, html {
     width: 25px;
     height: 25px;
     animation: spin 1s linear infinite;
-    margin-top: 15px;
+    margin: 10px auto 0 auto;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
-
-/* POINT END - style.css reorganizado */
