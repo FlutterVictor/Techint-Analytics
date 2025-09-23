@@ -1,175 +1,167 @@
-/* Layout base */
-#app {
-    display: flex;
-    height: 100vh;
+/* POINT INITIAL - Menu CSS */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  background-color: #f5f5f5;
 }
 
-/* Sidebar */
-#sidebar {
-    width: 220px;
-    background: #004080;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-sizing: border-box;
+.sidebar {
+  width: 250px;
+  background-color: #003366;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-#sidebar .logo img {
-    width: 120px;
-    display: block;
-    margin: 0 auto 20px auto;
+.sidebar h2 {
+  padding: 20px;
+  margin: 0;
+  font-size: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-#dashboardList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
+.menu {
+  flex-grow: 1;
 }
 
-#dashboardList li {
-    padding: 10px;
-    margin-bottom: 8px;
-    background: #0066cc;
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: center;
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-#dashboardList li:hover {
-    background: #0080ff;
+.menu ul li {
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-#logoutBtn {
-    padding: 10px;
-    background: #cc0000;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
+.menu ul li:hover {
+  background-color: #005599;
 }
 
-/* Conteúdo principal */
-#mainContent {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background: #f4f6f8;
-    overflow-y: auto;
+.logout {
+  padding: 15px 20px;
+  background-color: #cc0000;
+  cursor: pointer;
+  text-align: center;
 }
 
-/* Usuário topo */
-.user-section-top {
-    display: flex;
-    align-items: center;
-    background: white;
-    padding: 10px 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+.logout:hover {
+  background-color: #990000;
 }
 
-.user-section-top img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 12px;
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.user-section-top .user-info {
-    display: flex;
-    flex-direction: column;
+.user-info {
+  background-color: #003366;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 15px;
 }
 
-.user-section-top .name {
-    font-weight: bold;
-    font-size: 14px;
+.user-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.user-section-top .role {
-    font-size: 12px;
-    color: gray;
+.user-details {
+  display: flex;
+  flex-direction: column;
 }
 
-.user-section-top .project {
-    font-size: 12px;
-    color: #004080;
-    cursor: pointer;
-    text-decoration: underline;
-    margin-top: 2px;
+.user-details h3 {
+  margin: 0;
+  font-size: 16px;
 }
 
-/* Prévia Dashboard */
-#previewCard {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center;
+.user-details p {
+  margin: 0;
+  font-size: 13px;
+  color: #cccccc;
 }
 
-#previewCard p {
-    font-size: 16px;
-    margin-bottom: 15px;
+.user-project {
+  font-size: 12px;
+  color: #99ccff;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-#previewCard button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    background: #004080;
-    color: white;
-    cursor: pointer;
+.dashboard-preview {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
 }
 
-#previewCard button:hover {
-    background: #0066cc;
+.card-preview {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Seleção de projeto */
-#projectCard {
-    display: none;
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center;
+.project-selection {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
 }
 
-#projectCard button {
-    margin: 5px;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    background: #004080;
-    color: white;
-    cursor: pointer;
+.project-selection h3 {
+  margin-top: 0;
 }
 
-#projectCard button:hover {
-    background: #0066cc;
+.project-selection ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
 }
 
-#restrictedMsg {
-    color: red;
-    font-weight: bold;
-    margin-top: 10px;
+.project-selection ul li {
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
-.loader {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #004080;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    animation: spin 1s linear infinite;
-    margin: 10px auto 0 auto;
+.project-selection ul li:hover {
+  background-color: #f0f0f0;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+.project-selection .confirm-btn {
+  background: #003366;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
+
+.project-selection .confirm-btn:hover {
+  background: #005599;
+}
+
+.project-selection .error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+/* POINT END - Menu CSS */
