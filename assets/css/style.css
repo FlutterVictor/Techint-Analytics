@@ -1,5 +1,6 @@
-/* POINT INITIAL - style.css */
+/* POINT INITIAL - style.css responsivo */
 
+/* Mantém todo o CSS anterior intacto */
 * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
 body { display:flex; height:100vh; background-color:#f4f6f8; }
 
@@ -11,6 +12,8 @@ body { display:flex; height:100vh; background-color:#f4f6f8; }
     display:flex;
     flex-direction:column;
     padding:20px;
+    flex-shrink:0;
+    overflow-y:auto; /* permite scroll interno caso menu fique grande */
 }
 .sidebar h2 {
     margin-bottom:20px;
@@ -37,6 +40,8 @@ body { display:flex; height:100vh; background-color:#f4f6f8; }
     flex-direction:column;
     margin-top:5px;
     margin-left:10px;
+    max-height:300px; /* scroll se necessário */
+    overflow-y:auto;
 }
 .sub-menu .disciplina-item {
     padding:8px 10px;
@@ -75,6 +80,7 @@ header {
     align-items:center;
     gap:15px;
     position:relative;
+    flex-wrap:wrap;
 }
 
 /* User info */
@@ -87,22 +93,9 @@ header {
     background-position:center;
     cursor:pointer;
 }
-.user-name {
-    font-weight:bold;
-    font-size:1.1em;
-    color:#004080;
-    cursor:pointer;
-}
-.user-role {
-    color:#6699cc;
-    font-size:0.9em;
-}
-.user-project {
-    color:#004080;
-    font-size:0.9em;
-    margin-top:2px;
-    cursor:pointer;
-}
+.user-name { font-weight:bold; font-size:1.1em; color:#004080; cursor:pointer; }
+.user-role { color:#6699cc; font-size:0.9em; }
+.user-project { color:#004080; font-size:0.9em; margin-top:2px; cursor:pointer; }
 
 /* Card flutuante de seleção de projeto */
 #projectCard {
@@ -146,10 +139,7 @@ header {
     flex-wrap:wrap;
     margin-bottom:15px;
 }
-.mini-charts canvas {
-    border-radius:6px;
-    background:#f9f9f9;
-}
+.mini-charts canvas { border-radius:6px; background:#f9f9f9; }
 
 /* Access button */
 .access-btn {
@@ -179,4 +169,24 @@ header {
 /* Hidden file input */
 #fileInput { display:none; }
 
-/* POINT END - style.css */
+/* RESPONSIVE */
+@media (max-width:1024px){
+    body { flex-direction:column; }
+    .sidebar { width:100%; flex-direction:row; overflow-x:auto; padding:10px; }
+    .dashboard-item { margin-right:10px; margin-bottom:0; }
+    .sidebar .logout-btn { margin-top:0; margin-left:auto; }
+    .main { padding:15px; }
+}
+
+@media (max-width:768px){
+    .sidebar { flex-direction:column; height:auto; }
+    .sub-menu { max-height:200px; }
+}
+
+@media (max-width:480px){
+    header { flex-direction:column; align-items:flex-start; gap:10px; }
+    .user-photo { width:40px; height:40px; }
+    .preview-card { max-width:100%; padding:15px; }
+}
+
+/* POINT END - style.css responsivo */
