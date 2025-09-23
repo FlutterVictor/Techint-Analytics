@@ -1,46 +1,98 @@
+<!-- POINT INITIAL - menu.html completo -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Techint - Menu</title>
+<!-- CSS externos (crie/ajuste esses arquivos conforme discutido) -->
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/dashboards.css">
+</head>
+<body>
 <div id="app">
-    <!-- Menu lateral -->
-    <div id="sidebar">
-        <div class="logo">
-            <img src="assets/imagens/logo_techint.png" alt="Logo Empresa">
+
+    <!-- POINT INITIAL - Sidebar -->
+    <aside id="sidebar" role="navigation" aria-label="Menu lateral">
+        <div class="logo" aria-hidden="true">
+            <img src="assets/imagens/logo_techint.png" alt="Techint logo">
         </div>
-        <ul id="dashboardList">
-            <li data-dashboard="pycp">PYCP</li>
-            <li data-dashboard="rh">RH</li>
-            <li data-dashboard="producao">Produção</li>
-            <li data-dashboard="suprimentos">Suprimentos</li>
-            <li data-dashboard="qsms">QSMS</li>
+
+        <ul id="dashboardList" aria-label="Lista de Dashboards">
+            <li data-dashboard="PYCP" data-page="pycp.html" tabindex="0">PYCP</li>
+            <li data-dashboard="RH" data-page="rh.html" tabindex="0">RH</li>
+            <li data-dashboard="Produção" data-page="producao.html" tabindex="0">Produção</li>
+            <li data-dashboard="Suprimentos" data-page="suprimentos.html" tabindex="0">Suprimentos</li>
+            <li data-dashboard="QSMS" data-page="qsms.html" tabindex="0">QSMS</li>
         </ul>
-        <button id="logoutBtn">Logout</button>
-    </div>
 
-    <!-- Área principal -->
-    <div id="mainContent">
+        <button id="logoutBtn" aria-label="Logout">Logout</button>
+    </aside>
+    <!-- POINT END - Sidebar -->
 
-        <!-- Usuário topo -->
-        <div class="user-section-top">
-            <img id="userPhoto" src="assets/imagens/logo-por_cuadrado.jpeg" alt="Foto Usuário">
+    <!-- POINT INITIAL - Main Content -->
+    <main id="mainContent" role="main">
+
+        <!-- POINT INITIAL - User Top (foto circular, nome, cargo, projeto clicável) -->
+        <section class="user-section-top" aria-label="Informações do usuário">
+            <img id="userPhoto" src="assets/imagens/logo-por_cuadrado.jpeg" alt="Foto do usuário" title="Clique para alterar foto" />
             <div class="user-info">
-                <span class="name">José Victor Silva de Jesus</span>
-                <span class="role">Analista de Dados Jr</span>
-                <span class="project" id="currentProject">Selecionar Projeto</span>
+                <span class="name" id="userName">José Victor Silva de Jesus</span>
+                <span class="role" id="userRole">Analista de Dados Jr</span>
+                <span class="project" id="currentProject" title="Clique para selecionar projeto" role="button" tabindex="0">Selecionar Projeto</span>
             </div>
-        </div>
+            <!-- hidden file input para foto -->
+            <input type="file" id="fileInput" accept="image/*" style="display:none" aria-hidden="true" />
+        </section>
+        <!-- POINT END - User Top -->
 
-        <!-- Prévia de dashboards -->
-        <div id="previewCard">
-            <p>Selecione um dashboard à esquerda</p>
-            <button id="accessBtn" style="display:none;">Acessar</button>
-        </div>
+        <!-- POINT INITIAL - Preview Card -->
+        <section id="previewCard" aria-live="polite">
+            <h3 id="previewTitle">Selecione um dashboard à esquerda</h3>
+            <p id="previewDesc">Aqui aparecerá uma pré-visualização rápida do dashboard selecionado.</p>
 
-        <!-- Card seleção de projeto -->
-        <div id="projectCard">
-            <p>Selecione o projeto:</p>
-            <button data-project="PCI Usiminas (1087 colaboradores)">PCI Usiminas</button>
-            <button data-project="MOA Usiminas (355 colaboradores)">MOA Usiminas</button>
-            <button data-project="Projeto Restrito">Projeto Restrito</button>
-            <div id="restrictedMsg" style="display:none;">Acesso restrito, entre em contato com o administrador do sistema ou seu superior direto para solicitar acesso.</div>
-            <div class="loader" style="display:none;"></div>
-        </div>
-    </div>
+            <!-- Mini-gráficos placeholder (JS preencherá com Chart.js) -->
+            <div id="miniCharts" aria-hidden="true">
+                <canvas id="miniChart1"></canvas>
+                <canvas id="miniChart2"></canvas>
+                <canvas id="miniChart3"></canvas>
+                <canvas id="miniChart4"></canvas>
+            </div>
+
+            <div style="margin-top:12px;">
+                <button id="accessBtn" style="display:none;">Acessar</button>
+            </div>
+        </section>
+        <!-- POINT END - Preview Card -->
+
+        <!-- POINT INITIAL - Project Selection Card (hidden by default) -->
+        <section id="projectCard" aria-hidden="true" style="display:none;">
+            <h4>Selecione o Projeto</h4>
+
+            <div role="radiogroup" aria-label="Projetos disponíveis" id="projectRadioGroup">
+                <label><input type="radio" name="projeto" value="Projeto PCI Usiminas"> Projeto PCI Usiminas (1087 colaboradores)</label><br>
+                <label><input type="radio" name="projeto" value="Projeto MOA Usiminas"> Projeto MOA Usiminas (355 colaboradores)</label><br>
+                <label><input type="radio" name="projeto" value="Projeto Restrito"> Projeto Restrito</label>
+            </div>
+
+            <div style="margin-top:10px;">
+                <button id="confirmProjectBtn">Confirmar</button>
+                <button id="cancelProjectBtn">Cancelar</button>
+            </div>
+
+            <div id="projectMessage" aria-live="assertive" style="margin-top:12px;"></div>
+        </section>
+        <!-- POINT END - Project Selection Card -->
+
+    </main>
+    <!-- POINT END - Main Content -->
 </div>
+
+<!-- POINT INITIAL - Scripts (arquivos externos) -->
+<script src="assets/libs/chart.min.js"></script>  <!-- Chart.js (ou CDN) -->
+<script src="assets/js/main.js"></script>         <!-- lógica do menu, usuário, projeto -->
+<script src="assets/js/dashboards.js"></script>   <!-- mockups/mini-gráficos (opcional) -->
+<!-- POINT END - Scripts -->
+</body>
+</html>
+<!-- POINT END - menu.html completo -->
