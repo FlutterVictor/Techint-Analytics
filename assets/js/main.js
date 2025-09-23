@@ -69,40 +69,53 @@ function logout() { localStorage.removeItem('usuario'); window.location.href='in
 
 // Menu lateral
 const dashboardItems = document.querySelectorAll('.dashboard-item');
+
 dashboardItems.forEach(item => {
+    const submenu = item.querySelector('.sub-menu');
     item.addEventListener('click', () => {
-        // Ativa o dashboard selecionado
-        dashboardItems.forEach(i => {
-            i.classList.remove('active');
-            if(i.querySelector('.sub-menu')) i.querySelector('.sub-menu').style.display='none';
-        });
-        item.classList.add('active');
+        // Toggle submenu
+        if(submenu){
+            const isVisible = submenu.style.display === 'flex';
+            // Fecha todos os outros
+            dashboardItems.forEach(i => {
+                if(i !== item && i.querySelector('.sub-menu')) i.querySelector('.sub-menu').style.display='none';
+                i.classList.remove('active');
+            });
+            // Alterna o clique do atual
+            submenu.style.display = isVisible ? 'none' : 'flex';
+            if(!isVisible) item.classList.add('active');
+        } else {
+            // Sem submenu, só ativa
+            dashboardItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            // Fecha todos submenus
+            dashboardItems.forEach(i => { if(i.querySelector('.sub-menu')) i.querySelector('.sub-menu').style.display='none'; });
+        }
 
-        // Expande submenu se existir
-        const submenu = item.querySelector('.sub-menu');
-        if(submenu) submenu.style.display='flex';
-
-        // Atualiza prévia para o dashboard
+        // Atualiza prévia
         const dashboard = item.dataset.dashboard;
         updatePreview(dashboard, null);
     });
 });
 
 // Submenu de disciplinas
-const disciplinas = document.querySelectorAll('.disciplina-item');
-disciplinas.forEach(d => {
-    d.addEventListener('click', () => {
-        // Remove destaque de outras disciplinas
-        disciplinas.forEach(dd => dd.classList.remove('active'));
-        d.classList.add('active');
+const updateDisciplinasListeners = () => {
+    const disciplinas = document.querySelectorAll('.disciplina-item');
+    disciplinas.forEach(d => {
+        d.addEventListener('click', () => {
+            // Remove destaque de outras disciplinas
+            disciplinas.forEach(dd => dd.classList.remove('active'));
+            d.classList.add('active');
 
-        const dashboard = d.closest('.dashboard-item').dataset.dashboard;
-        const disciplina = d.dataset.disciplina;
+            const dashboard = d.closest('.dashboard-item').dataset.dashboard;
+            const disciplina = d.dataset.disciplina;
 
-        // Atualiza prévia
-        updatePreview(dashboard, disciplina);
+            // Atualiza prévia
+            updatePreview(dashboard, disciplina);
+        });
     });
-});
+};
+updateDisciplinasListeners();
 
 // Função para atualizar preview-card
 function updatePreview(dashboard, disciplina){
