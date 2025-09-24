@@ -15,7 +15,7 @@
 (() => {
   // ---------- Configurações / Paleta ----------
   const CORES_AZUL = ['#004080', '#0066cc', '#80b3ff']; // escuro, médio, claro
-  const DEFAULT_CHART_HEIGHT = 260; // px (visual)
+  const DEFAULT_CHART_HEIGHT = 180; // px (visual)
 
   // ---------- Dados do usuário ----------
   const usuario = JSON.parse(localStorage.getItem('usuario')) || {
