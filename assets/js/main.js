@@ -162,7 +162,9 @@ function updatePreview(setor, disciplina){
         canvas.id = `chart${i}`;
         canvas.style.margin='10px';
         canvas.style.flex='1 1 200px';
-        canvas.style.height='200px';
+        canvas.style.minHeight = '200px';
+        canvas.style.maxHeight = '300px';
+
         miniChartsContainer.appendChild(canvas);
 
         const ctx = canvas.getContext('2d');
