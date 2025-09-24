@@ -13,10 +13,10 @@ body { display:flex; height:100vh; background-color:#f4f6f8; overflow:hidden; }
     display:flex;
     flex-direction:column;
     padding:20px;
-    overflow-y:auto; /* scroll para menus longos */
+    overflow-y:auto;
 }
 .sidebar h2 {
-    margin-bottom:20px;
+    margin-bottom:60px; /* espaço maior abaixo do logo (3-4cm aprox) */
     font-size:1.2em;
     text-align:center;
 }
@@ -93,22 +93,9 @@ header {
     background-position:center;
     cursor:pointer;
 }
-.user-name {
-    font-weight:bold;
-    font-size:1.1em;
-    color:#004080;
-    cursor:pointer;
-}
-.user-role {
-    color:#6699cc;
-    font-size:0.9em;
-}
-.user-project {
-    color:#004080;
-    font-size:0.9em;
-    margin-top:2px;
-    cursor:pointer;
-}
+.user-name { font-weight:bold; font-size:1.1em; color:#004080; cursor:pointer; }
+.user-role { color:#6699cc; font-size:0.9em; }
+.user-project { color:#004080; font-size:0.9em; margin-top:2px; cursor:pointer; }
 
 /* Card flutuante de seleção de projeto */
 #projectCard {
@@ -149,17 +136,23 @@ header {
 }
 .preview-card h3 { margin-bottom:10px; color:#004080; }
 .preview-card p { margin-bottom:15px; color:#333; }
+
+/* Mini-charts flexível */
 .mini-charts {
     display:flex;
-    gap:10px;
     flex-wrap:wrap;
+    gap:18px;
+    justify-content:space-between;
     margin-bottom:15px;
 }
 .mini-charts canvas {
+    flex:1 1 calc(33% - 20px); /* até 3 por linha */
+    min-width:220px;
+    min-height:200px;
+    max-height:320px;
     border-radius:6px;
     background:#f9f9f9;
-    flex:1 1 200px;
-    min-height:200px;
+    padding:8px;
 }
 
 /* Access button */
@@ -196,7 +189,16 @@ header {
     body{ flex-direction:column; }
     .sidebar { width:100%; flex-direction:row; overflow-x:auto; padding:10px; }
     .dashboard-item { margin-right:10px; margin-bottom:0; }
-    .sub-menu { position:absolute; background:#004080; top:60px; left:0; z-index:10; min-width:200px; border-radius:6px; display:none; }
+    .sub-menu {
+        position:absolute;
+        background:#004080;
+        top:60px;
+        left:0;
+        z-index:10;
+        min-width:200px;
+        border-radius:6px;
+        display:none;
+    }
     .main { padding:10px; flex:1; }
 }
 
@@ -205,13 +207,13 @@ header {
     .dashboard-item{ margin-bottom:5px; }
     header{ flex-direction:column; align-items:flex-start; gap:5px; }
     .preview-card{ padding:10px; }
-    .mini-charts canvas{ min-height:150px; }
+    .mini-charts canvas{ flex:1 1 calc(50% - 15px); min-height:160px; }
 }
 
 @media(max-width:480px){
     .sidebar{ width:100%; max-height:200px; }
     .preview-card{ padding:8px; }
-    .mini-charts canvas{ min-height:120px; }
+    .mini-charts canvas{ flex:1 1 100%; min-height:140px; }
 }
 
 /* POINT END - style.css */
