@@ -80,7 +80,10 @@
     card.style.display = 'flex';
     card.style.flexDirection = 'column';
     card.style.alignItems = 'stretch';
-    card.style.width = '100%';
+    card.style.flex = '1 1 calc(33% - 20px)'; // 3 por linha com espaçamento
+    card.style.maxWidth = 'calc(33% - 20px)';
+    card.style.minWidth = '250px';
+    card.style.margin = '10px';
     card.style.boxSizing = 'border-box';
 
     const title = document.createElement('div');
