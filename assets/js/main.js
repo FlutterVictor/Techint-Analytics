@@ -16,6 +16,8 @@ const projectCard = document.getElementById('projectCard');
 const confirmBtn = document.getElementById('confirmProjectBtn');
 const projectMessage = document.getElementById('projectMessage');
 const previewCard = document.getElementById('previewCard');
+const miniChartsContainer = document.getElementById('miniChartsContainer');
+const accessBtn = document.getElementById('accessDashboardBtn');
 
 // Inicializa informações do usuário
 userName.innerText = usuario.name;
@@ -59,118 +61,135 @@ confirmBtn.addEventListener('click', () => {
             projectCard.style.display = 'none';
             localStorage.setItem('usuario', JSON.stringify(usuario));
         } else {
-            projectMessage.innerHTML = 'Acesso restrito, entre em contato com o administrador ou superior <span class="error-icon">✖</span>';
+            projectMessage.innerHTML = 'Acesso restrito <span class="error-icon">✖</span>';
         }
     },1500);
 });
 
 // Logout
-function logout() { localStorage.removeItem('usuario'); window.location.href='index.html'; }
+function logout() { 
+    localStorage.removeItem('usuario'); 
+    window.location.href='index.html'; 
+}
 
-// Menu lateral
+// MENU LATERAL - Toggle submenus
 const dashboardItems = document.querySelectorAll('.dashboard-item');
-
 dashboardItems.forEach(item => {
     const submenu = item.querySelector('.sub-menu');
     item.addEventListener('click', () => {
-        // Toggle submenu
-        if(submenu){
-            const isVisible = submenu.style.display === 'flex';
-            // Fecha todos os outros
-            dashboardItems.forEach(i => {
-                if(i !== item && i.querySelector('.sub-menu')) i.querySelector('.sub-menu').style.display='none';
-                i.classList.remove('active');
-            });
-            // Alterna o clique do atual
-            submenu.style.display = isVisible ? 'none' : 'flex';
-            if(!isVisible) item.classList.add('active');
-        } else {
-            // Sem submenu, só ativa
-            dashboardItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            // Fecha todos submenus
-            dashboardItems.forEach(i => { if(i.querySelector('.sub-menu')) i.querySelector('.sub-menu').style.display='none'; });
-        }
+        const isVisible = submenu && submenu.style.display === 'flex';
+
+        // Fecha todos os outros
+        dashboardItems.forEach(i => {
+            const sm = i.querySelector('.sub-menu');
+            if(sm) sm.style.display='none';
+            i.classList.remove('active');
+        });
+
+        // Toggle atual
+        if(submenu) submenu.style.display = isVisible ? 'none' : 'flex';
+        if(!isVisible) item.classList.add('active');
 
         // Atualiza prévia
-        const dashboard = item.dataset.dashboard;
-        updatePreview(dashboard, null);
+        const setor = item.dataset.setor;
+        updatePreview(setor, null);
     });
 });
 
-// Submenu de disciplinas
-const updateDisciplinasListeners = () => {
+// DISCIPLINAS - Seleção
+function updateDisciplinasListeners(){
     const disciplinas = document.querySelectorAll('.disciplina-item');
     disciplinas.forEach(d => {
-        d.addEventListener('click', () => {
+        d.addEventListener('click', (e) => {
+            e.stopPropagation(); // Impede toggle do menu pai
             // Remove destaque de outras disciplinas
             disciplinas.forEach(dd => dd.classList.remove('active'));
             d.classList.add('active');
 
-            const dashboard = d.closest('.dashboard-item').dataset.dashboard;
+            const setor = d.closest('.dashboard-item').dataset.setor;
             const disciplina = d.dataset.disciplina;
 
-            // Atualiza prévia
-            updatePreview(dashboard, disciplina);
+            updatePreview(setor, disciplina);
         });
     });
-};
+}
 updateDisciplinasListeners();
 
-// Função para atualizar preview-card
-function updatePreview(dashboard, disciplina){
-    let title = `Sistema de Gerenciamento ${dashboard}`;
+// Função para atualizar preview-card e gráficos
+let chartInstances = [];
+function updatePreview(setor, disciplina){
+    // Atualiza título e descrição
+    let title = `Sistema de Gerenciamento ${setor || ''}`;
     let desc = '';
-    let miniData = {};
-
     if(disciplina){
         title += ` - ${disciplina}`;
-        desc = `Prévia da disciplina ${disciplina} do setor ${dashboard}.`;
+        desc = `Prévia da disciplina ${disciplina} do setor ${setor}.`;
+        accessBtn.style.display='inline-block';
+        accessBtn.innerText = `Acessar ${disciplina}`;
     } else {
-        // Descrição resumida do dashboard
-        switch(dashboard){
-            case 'PYCP': desc='Planejamento, Medição e Custo.'; break;
-            case 'QSMS': desc='Qualidade, Segurança, Meio Ambiente e Saúde.'; break;
-            case 'Produção': desc='Elétrica, Andaime, Mecânica, Solda, Estruturas, Pintura, Isolamento, Movimentação, Instrumentação.'; break;
-            case 'RH': desc='Recursos Humanos, Financeiro e Contratual.'; break;
-            case 'Suprimentos': desc='Compras, Almoxarifado e Suprimentos.'; break;
-            default: desc='Visualize indicadores.'; break;
+        // Dashboard inicial ou setor
+        accessBtn.style.display='none';
+        switch(setor){
+            case 'PYCP': desc='Planejamento, Medição e Custo'; break;
+            case 'QSMS': desc='Qualidade, Segurança, Meio Ambiente e Saúde'; break;
+            case 'Produção': desc='Elétrica, Andaime, Mecânica, Solda, Estruturas, Pintura, Isolamento, Movimentação e Instrumentação'; break;
+            case 'Diaf': desc='Recursos Humanos, Financeiro e Contratual'; break;
+            default: desc='Dashboard Gerencial: Avanço de obras, custo previsto x real, HH previsto x real, desvio e indicadores gerais.'; break;
         }
     }
 
     previewCard.querySelector('h3').innerText = title;
     previewCard.querySelector('p').innerText = desc;
 
-    // Mostra botão de acessar se disciplina selecionada
-    const accessBtn = previewCard.querySelector('.access-btn');
-    if(disciplina){ 
-        accessBtn.style.display='inline-block';
-        accessBtn.innerText=`Acessar ${disciplina}`;
-    } else {
-        accessBtn.style.display='none';
-    }
+    // Limpa gráficos anteriores
+    miniChartsContainer.innerHTML = '';
+    chartInstances.forEach(c => c.destroy());
+    chartInstances = [];
 
-    // Atualiza mini-gráficos (exemplo genérico)
-    miniData = {
-        STD:[1.2,0.9,1.5,1.1,0.8],
-        HH:[10,12,8,15,9],
-        Custo:[10000,8000,12000,7000,5000],
-        Medicao:[80,60,50,90,70]
+    // Dados aleatórios para exemplo
+    const miniData = {
+        STD:[Math.random()*2,Math.random()*2,Math.random()*2,Math.random()*2,Math.random()*2],
+        HH:[Math.random()*20,Math.random()*20,Math.random()*20,Math.random()*20,Math.random()*20],
+        Custo:[Math.random()*20000,Math.random()*20000,Math.random()*20000,Math.random()*20000,Math.random()*20000],
+        Medicao:[Math.random()*100,Math.random()*100,Math.random()*100,Math.random()*100,Math.random()*100]
     };
-
-    const ctxIds = ['miniSTD','miniHH','miniCusto','miniMedicao'];
+    const labels = ['A1','A2','A3','A4','A5'];
     const types = ['line','bar','bar','doughnut'];
-    ctxIds.forEach((id,i)=>{
-        if(window[id]) window[id].destroy();
-        window[id] = new Chart(document.getElementById(id), {
-            type:types[i],
-            data:{ labels:['A1','A2','A3','A4','A5'], datasets:[{data:miniData[Object.keys(miniData)[i]], backgroundColor:'#004080', borderColor:'#004080', fill:types[i]=='line'}]},
-            options:{ responsive:false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} }
+    const keys = ['STD','HH','Custo','Medicao'];
+
+    keys.forEach((key,i)=>{
+        const canvas = document.createElement('canvas');
+        canvas.id = `chart${i}`;
+        canvas.style.margin='10px';
+        canvas.style.flex='1 1 200px';
+        canvas.style.height='200px';
+        miniChartsContainer.appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+        const chart = new Chart(ctx,{
+            type: types[i],
+            data:{
+                labels: labels,
+                datasets:[{
+                    label: key,
+                    data: miniData[key],
+                    backgroundColor:'#004080',
+                    borderColor:'#004080',
+                    fill: types[i]==='line'
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false,
+                plugins:{ legend:{ display:false } },
+                scales:{ x:{ display:true }, y:{ display:true } }
+            }
         });
+        chartInstances.push(chart);
     });
 }
 
-// Inicializa com PYCP
-updatePreview('PYCP', null);
+// Inicializa com dashboard geral
+updatePreview(null, null);
 
 /* POINT END - main.js */
