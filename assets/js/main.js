@@ -10,12 +10,20 @@
   - destruição segura de instâncias Chart.js para evitar bugs
   - paleta de azuis (até 3 cores)
   - responsividade leve (aplica classes ao container para 1/2/3 colunas)
+  - modal de mapa (Leaflet) + heatmap (leaflet-heat se disponível)
+  - plugin interno para rótulos de dados nos charts
 */
 
 (() => {
   // ---------- Configurações / Paleta ----------
   const CORES_AZUL = ['#004080', '#0066cc', '#80b3ff']; // escuro, médio, claro
-  const DEFAULT_CHART_HEIGHT = 180; // px (visual)
+  const DEFAULT_CHART_HEIGHT = 140; // px reduzido conforme pedido
+
+  // Coordenadas para o heatmap (sua solicitação)
+  const HEAT_POINTS = [
+    { lat: -19.48366303752505, lng: -42.52828474324588, value: 1 },
+    { lat: -19.48118578375113, lng: -42.54286877621104, value: 1 }
+  ];
 
   // ---------- Dados do usuário ----------
   const usuario = JSON.parse(localStorage.getItem('usuario')) || {
@@ -35,6 +43,11 @@
   const previewCard = document.getElementById('previewCard');
   const miniChartsContainer = document.getElementById('miniChartsContainer');
   const accessBtn = document.getElementById('accessDashboardBtn');
+
+  // Modal elements (criar dinamicamente)
+  let mapModal = null;
+  let mapInstance = null;
+  let mapHeatLayer = null;
 
   // ---------- Inicialização UI ----------
   userName.innerText = usuario.name;
@@ -62,6 +75,7 @@
       try { c.destroy(); } catch (e) { /* ignore */ }
     });
     miniChartsContainer._charts = [];
+    // limpa DOM
     miniChartsContainer.innerHTML = '';
     // remover classes de layout
     miniChartsContainer.classList.remove('one-per-row', 'two-per-row');
@@ -72,34 +86,116 @@
     miniChartsContainer._charts.push(chart);
   }
 
-  // Cria um elemento card com título + canvas
-  function createChartCard(titleText) {
+  // ---------- Chart.js plugin simples para rótulos (draw values) ----------
+  // Plugin simples que desenha valores sobre barras/pontos/doughnut
+  const DataLabelPlugin = {
+    id: 'simpleDataLabel',
+    afterDatasetsDraw: function(chart) {
+      const ctx = chart.ctx;
+      chart.data.datasets.forEach((dataset, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (!meta || !meta.data) return;
+        meta.data.forEach((element, index) => {
+          ctx.save();
+          const value = dataset.data[index];
+          const fontSize = 11;
+          ctx.font = fontSize + "px Arial";
+          ctx.fillStyle = CORES_AZUL[0];
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          let posX, posY;
+
+          if (element.tooltipPosition) {
+            const pos = element.tooltipPosition();
+            posX = pos.x;
+            posY = pos.y - 6;
+          } else {
+            const bounds = element.getBoundingClientRect ? element.getBoundingClientRect() : null;
+            posX = element.x || (element._model && element._model.x) || element.x;
+            posY = (element.y || (element._model && element._model.y)) - 6;
+          }
+
+          // For doughnut/pie, put label inside slice near center
+          if (chart.config.type === 'doughnut' || chart.config.type === 'pie') {
+            const center = element._model ? {x: element._model.x, y: element._model.y} : {x: element.x, y: element.y};
+            // place slightly towards center
+            posX = center.x;
+            posY = center.y - (DEFAULT_CHART_HEIGHT / 6);
+          }
+
+          // draw
+          try {
+            ctx.fillText(String(value), posX, posY);
+          } catch (e) {
+            // fallback
+          }
+          ctx.restore();
+        });
+      });
+    }
+  };
+
+  // registra plugin localmente (Chart.js global must exist)
+  if (window.Chart && !Chart.registry.getPlugin('simpleDataLabel')) {
+    Chart.register(DataLabelPlugin);
+  }
+
+  // Cria um elemento card com título + canvas (e suporte a mini-map)
+  function createChartCard(titleText, options = {}) {
     const card = document.createElement('div');
     card.className = 'chart-card';
-    // Inline card styles kept minimal — layout control by CSS
     card.style.display = 'flex';
     card.style.flexDirection = 'column';
     card.style.alignItems = 'stretch';
-    card.style.flex = '1 1 calc(33% - 20px)'; // 3 por linha com espaçamento
+    card.style.flex = '1 1 calc(33% - 20px)';
     card.style.maxWidth = 'calc(33% - 20px)';
     card.style.minWidth = '250px';
     card.style.margin = '10px';
     card.style.boxSizing = 'border-box';
+    card.dataset.card = 'chart';
 
     const title = document.createElement('div');
     title.className = 'chart-card-title';
     title.innerText = titleText;
     title.style.color = CORES_AZUL[0];
     title.style.fontWeight = '600';
-    title.style.marginBottom = '8px';
+    title.style.marginBottom = '6px';
     title.style.fontSize = '0.95rem';
 
     const value = document.createElement('div');
     value.className = 'chart-card-value';
-    value.innerText = ''; // preenchido opcionalmente
+    value.innerText = options.valueText || '';
     value.style.color = '#333';
-    value.style.fontSize = '1.05rem';
+    value.style.fontSize = '1rem';
     value.style.marginBottom = '8px';
+
+    // if this is a map card
+    if (options.mapCard) {
+      const mapWrap = document.createElement('div');
+      mapWrap.style.width = '100%';
+      mapWrap.style.height = '140px';
+      mapWrap.style.borderRadius = '8px';
+      mapWrap.style.overflow = 'hidden';
+      mapWrap.style.background = '#e9eef6';
+      mapWrap.style.cursor = 'pointer';
+      mapWrap.dataset.mapMini = 'true';
+
+      // small placeholder canvas/div where we will init a mini map if possible
+      const miniDiv = document.createElement('div');
+      miniDiv.style.width = '100%';
+      miniDiv.style.height = '100%';
+      miniDiv.className = 'mini-map-target';
+      mapWrap.appendChild(miniDiv);
+
+      // on click open modal map
+      mapWrap.addEventListener('click', () => openMapModal(setorForMapContext(), titleText));
+
+      card.appendChild(title);
+      card.appendChild(value);
+      card.appendChild(mapWrap);
+
+      return { card, mapMini: miniDiv, title, value };
+    }
 
     const canvas = document.createElement('canvas');
     canvas.style.width = '100%';
@@ -116,7 +212,6 @@
   // Cria dataset com até 3 cores (cicla cores usadas)
   function datasetWithBluePalette(data, label, type) {
     if (type === 'doughnut' || type === 'pie') {
-      // use array of colors one per data point (cycle)
       const bg = data.map((_, i) => CORES_AZUL[i % CORES_AZUL.length]);
       return {
         label,
@@ -126,7 +221,6 @@
         borderWidth: 1
       };
     } else if (type === 'bar') {
-      // per-bar color can be array or single color
       const bg = data.map((_, i) => CORES_AZUL[i % CORES_AZUL.length]);
       return {
         label,
@@ -135,7 +229,7 @@
         borderColor: CORES_AZUL[0],
         borderWidth: 1
       };
-    } else { // line, radar ...
+    } else {
       return {
         label,
         data,
@@ -159,7 +253,6 @@
   }
 
   // ---------- User interactions ----------
-
   // Upload de foto
   userPhoto.addEventListener('click', () => fileInput.click());
   fileInput.addEventListener('change', e => {
@@ -177,7 +270,6 @@
   // Project card open
   userProject.addEventListener('click', (e) => {
     projectCard.style.display = 'block';
-    // position: ensure visible within main header area (no layout change)
     e.stopPropagation();
   });
 
@@ -194,6 +286,7 @@
     if (e.key === 'Escape') {
       projectCard.style.display = 'none';
       projectMessage.innerHTML = '';
+      closeMapModal();
     }
   });
 
@@ -227,8 +320,6 @@
   dashboardItems.forEach(item => {
     const submenu = item.querySelector('.sub-menu');
     item.addEventListener('click', (e) => {
-      // If click on submenu item, let that handler run (we stopPropagation there).
-      // Toggle this submenu, and close others
       const isVisible = submenu && submenu.style.display === 'flex';
 
       dashboardItems.forEach(i => {
@@ -241,7 +332,6 @@
         submenu.style.display = isVisible ? 'none' : 'flex';
         if (!isVisible) item.classList.add('active');
       } else {
-        // no submenu -> just active
         item.classList.add('active');
       }
 
@@ -254,7 +344,6 @@
   function bindDisciplinaClicks() {
     const disciplinas = document.querySelectorAll('.disciplina-item');
     disciplinas.forEach(d => {
-      // ensure we don't double-bind
       d.removeEventListener('click', onDisciplinaClick);
       d.addEventListener('click', onDisciplinaClick);
     });
@@ -274,13 +363,14 @@
   bindDisciplinaClicks();
 
   // ---------- Chart rendering logic ----------
-  // We'll have predefined mock chart configs per setor/disciplina to show variety
   const MOCKS = {
     gerencial: [
       { id: 'g_avanco', type: 'line', title: 'Avanço da Obra (%)', labels: ['Jan','Fev','Mar','Abr','Mai'], generator: () => randomArray(5, 100) },
       { id: 'g_custo', type: 'bar', title: 'Custo Previsto x Real (R$)', labels: ['Previsto','Realizado'], generator: () => [100000, 95000] },
       { id: 'g_hh', type: 'bar', title: 'HH Previsto x Real', labels: ['Previsto','Realizado'], generator: () => [1200, 1100] },
-      { id: 'g_desvio', type: 'doughnut', title: 'Desvio (%)', labels: ['Atraso','Dentro'], generator: () => [20,80] }
+      { id: 'g_desvio', type: 'doughnut', title: 'Desvio (%)', labels: ['Atraso','Dentro'], generator: () => [20,80] },
+      // mapa sempre presente no gerencial
+      { id: 'g_mapa', type: 'map', title: 'Mapa Efetividade (Mini)', map: true }
     ],
     PYCP: {
       setorPreview: [
@@ -312,7 +402,8 @@
     Producao: {
       setorPreview: [
         { type:'line', title:'Produção Geral (%)', labels:['A1','A2','A3','A4'], generator: ()=> randomArray(4,100) },
-        { type:'bar', title:'HH por Disciplina', labels:['Elétrica','Mecânica','Solda'], generator: ()=> randomArray(3,200) }
+        { type:'bar', title:'HH por Disciplina', labels:['Elétrica','Mecânica','Solda'], generator: ()=> randomArray(3,200) },
+        { id: 'p_mapa', type: 'map', title: 'Mapa Efetividade (Mini)', map: true }
       ],
       Eletrica:[{type:'line', title:'Elétrica (%)', labels:['A1','A2','A3'], generator: ()=> randomArray(3,100)}],
       Andaime:[{type:'bar', title:'Andaime (m)', labels:['Montagem','Desmontagem'], generator: ()=> [200,180]}],
@@ -346,32 +437,41 @@
     } else {
       const block = MOCKS[setor];
       if (!block) {
-        // fallback: show gerencial if setor desconhecido
         items = MOCKS.gerencial;
       } else {
         if (disciplina) {
           items = block[disciplina] || [];
         } else {
-          // setor preview
           items = block.setorPreview || [];
         }
       }
     }
 
-    // fallback: ensure at least 1 chart
+    // fallback
     if (!items || items.length === 0) {
       items = [{ type: 'line', title: 'Indicador', labels: ['A','B','C'], generator: ()=> randomArray(3,100) }];
     }
 
-    // decide layout class based on count
+    // decide layout class
     if (items.length === 1) miniChartsContainer.classList.add('one-per-row');
     else if (items.length === 2) miniChartsContainer.classList.add('two-per-row');
     else miniChartsContainer.classList.remove('one-per-row','two-per-row');
 
     // create each card + chart
     items.forEach((cfg, idx) => {
+      // map card
+      if (cfg.map) {
+        const { card, mapMini, title, value } = createChartCard(cfg.title || `Mapa ${idx+1}`, { mapCard: true, valueText: '' });
+        miniChartsContainer.appendChild(card);
+        // initialize mini-map if Leaflet available
+        setTimeout(() => {
+          initMiniMap(mapMini);
+        }, 60);
+        return;
+      }
+
       const { card, canvas, title, value } = createChartCard(cfg.title || `Gráfico ${idx+1}`);
-      // optional value summary (example): show last datapoint or sum for bar/doughnut
+      // compute data
       const data = (typeof cfg.generator === 'function') ? cfg.generator() : (cfg.data || randomArray(cfg.labels ? cfg.labels.length : 5, 100));
       if (cfg.type === 'doughnut' || cfg.type === 'pie') {
         const total = data.reduce((a,b)=>a+b,0);
@@ -382,12 +482,9 @@
         value.innerText = data.length>0 ? `${data[data.length-1]}` : '';
       }
 
-      // append card into container
       miniChartsContainer.appendChild(card);
 
-      // create chart
       const ctx = canvas.getContext('2d');
-      // dataset(s)
       const ds = [ datasetWithBluePalette(data, cfg.title || 'Série', cfg.type) ];
 
       const chartConfig = {
@@ -400,13 +497,15 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: cfg.type !== 'line' } // show legend for non-line for clarity
+            legend: { display: cfg.type !== 'line' },
+            simpleDataLabel: {} // plugin active
           },
           scales: (cfg.type === 'doughnut' || cfg.type === 'pie' || cfg.type === 'radar') ? {} : {
             x: { display: true },
             y: { display: true }
           }
-        }
+        },
+        plugins: [DataLabelPlugin]
       };
 
       try {
@@ -416,6 +515,180 @@
         console.error('Erro ao instanciar Chart.js', err);
       }
     });
+  }
+
+  // ---------- Map helpers (mini + modal) ----------
+  function initMiniMap(targetDiv) {
+    // if Leaflet not present, show fallback marker boxes
+    if (typeof L !== 'undefined') {
+      // create a lightweight map instance limited to the div (no global reuse)
+      try {
+        // ensure unique id
+        if (!targetDiv.id) targetDiv.id = 'mini-map-' + Math.random().toString(36).slice(2,8);
+        const map = L.map(targetDiv.id, { attributionControl:false, zoomControl:false, dragging:false, scrollWheelZoom:false, doubleClickZoom:false }).setView([HEAT_POINTS[0].lat, HEAT_POINTS[0].lng], 14);
+        // satellite tiles (Esri)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 19
+        }).addTo(map);
+
+        // add translucent red circle(s)
+        HEAT_POINTS.forEach(p => {
+          L.circle([p.lat,p.lng], { radius: 200, color: '#ff3333', fillColor:'#ff3333', fillOpacity:0.18, weight:0 }).addTo(map);
+        });
+
+        // small marker optional
+        L.circleMarker([HEAT_POINTS[0].lat, HEAT_POINTS[0].lng], { radius:4, fillColor:'#fff', color:CORES_AZUL[0], fillOpacity:1 }).addTo(map);
+
+        // keep map reference in element for cleanup
+        targetDiv._miniMap = map;
+      } catch (e) {
+        console.warn('Mini-map init falhou', e);
+      }
+    } else {
+      // fallback -> show a simple overlay
+      targetDiv.style.display = 'flex';
+      targetDiv.style.alignItems = 'center';
+      targetDiv.style.justifyContent = 'center';
+      targetDiv.innerHTML = `<div style="color:${CORES_AZUL[0]};font-size:0.95rem;padding:8px;">Mini-mapa (Leaflet não carregado)</div>`;
+    }
+  }
+
+  function setorForMapContext() {
+    // Return current active setor or 'Gerencial' if none
+    const active = document.querySelector('.dashboard-item.active');
+    if (active) return active.dataset.setor || 'Produção';
+    return null;
+  }
+
+  // Map modal: cria DOM e exibe mapa em tela maior
+  function openMapModal(setorContext, titleText) {
+    if (!mapModal) {
+      mapModal = document.createElement('div');
+      mapModal.id = 'mapModal';
+      Object.assign(mapModal.style, {
+        position:'fixed',
+        left:0, top:0, right:0, bottom:0,
+        background:'rgba(0,0,0,0.6)',
+        zIndex:9999,
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center'
+      });
+
+      const inner = document.createElement('div');
+      inner.style.width = '85%';
+      inner.style.height = '80%';
+      inner.style.background = '#fff';
+      inner.style.borderRadius = '10px';
+      inner.style.overflow = 'hidden';
+      inner.style.display = 'flex';
+      inner.style.flexDirection = 'column';
+
+      const header = document.createElement('div');
+      header.style.display = 'flex';
+      header.style.alignItems = 'center';
+      header.style.justifyContent = 'space-between';
+      header.style.padding = '12px 16px';
+      header.style.borderBottom = '1px solid #eee';
+      const hTitle = document.createElement('div');
+      hTitle.innerText = titleText || 'Mapa';
+      hTitle.style.fontWeight = '700';
+      hTitle.style.color = CORES_AZUL[0];
+      header.appendChild(hTitle);
+      const closeBtn = document.createElement('button');
+      closeBtn.innerText = 'Fechar';
+      closeBtn.style.background = CORES_AZUL[0];
+      closeBtn.style.color = '#fff';
+      closeBtn.style.border = 'none';
+      closeBtn.style.padding = '8px 12px';
+      closeBtn.style.borderRadius = '6px';
+      closeBtn.style.cursor = 'pointer';
+      closeBtn.addEventListener('click', closeMapModal);
+      header.appendChild(closeBtn);
+
+      const mapHolder = document.createElement('div');
+      mapHolder.id = 'mapModalHolder';
+      mapHolder.style.flex = '1';
+      mapHolder.style.minHeight = '200px';
+
+      inner.appendChild(header);
+      inner.appendChild(mapHolder);
+      mapModal.appendChild(inner);
+      document.body.appendChild(mapModal);
+      // clicking on backdrop closes
+      mapModal.addEventListener('click', (e) => { if (e.target === mapModal) closeMapModal(); });
+    } else {
+      document.body.appendChild(mapModal);
+      mapModal.style.display = 'flex';
+    }
+
+    // init leaflet map in modal (destroy previous if exists)
+    setTimeout(() => initModalMap('mapModalHolder'), 120);
+  }
+
+  function closeMapModal() {
+    if (mapModal) {
+      mapModal.style.display = 'none';
+    }
+    // destroy map instance to free memory
+    try {
+      if (mapInstance) {
+        mapInstance.remove();
+        mapInstance = null;
+        mapHeatLayer = null;
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function initModalMap(holderId) {
+    const holder = document.getElementById(holderId);
+    if (!holder) return;
+    // clear previous
+    holder.innerHTML = '';
+    // If Leaflet available, initialize real map
+    if (typeof L !== 'undefined') {
+      // create container
+      const mapDiv = document.createElement('div');
+      mapDiv.style.width = '100%';
+      mapDiv.style.height = '100%';
+      mapDiv.id = 'leaflet-map-' + Math.random().toString(36).slice(2,8);
+      holder.appendChild(mapDiv);
+
+      // create map
+      try {
+        mapInstance = L.map(mapDiv.id, { zoomControl:true }).setView([HEAT_POINTS[0].lat, HEAT_POINTS[0].lng], 15);
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 19
+        }).addTo(mapInstance);
+
+        // if leaflet-heat available, use it
+        if (typeof L.heatLayer === 'function') {
+          const heatPoints = HEAT_POINTS.map(p => [p.lat, p.lng, (p.value || 0.6)]);
+          mapHeatLayer = L.heatLayer(heatPoints, { radius: 30, blur: 25, maxZoom: 17, gradient: {0.2: 'rgba(128,179,255,0.2)', 0.6: 'rgba(0,102,204,0.35)', 1: 'rgba(255,0,0,0.6)'} }).addTo(mapInstance);
+        } else {
+          // fallback: draw semi-transparent circles
+          HEAT_POINTS.forEach(p => {
+            L.circle([p.lat,p.lng], { radius: 250, color: '#ff3333', fillColor:'#ff3333', fillOpacity:0.18, weight:0 }).addTo(mapInstance);
+          });
+        }
+
+        // add markers for points
+        HEAT_POINTS.forEach(p => {
+          L.circleMarker([p.lat,p.lng], { radius:4, fillColor:'#fff', color:CORES_AZUL[0], fillOpacity:1 }).addTo(mapInstance);
+        });
+
+        // fit bounds
+        const latlngs = HEAT_POINTS.map(p => [p.lat,p.lng]);
+        if (latlngs.length) {
+          mapInstance.fitBounds(latlngs, { padding:[40,40] });
+        }
+      } catch (e) {
+        console.error('Erro ao iniciar modal map:', e);
+        holder.innerHTML = '<div style="padding:20px;color:#333">Erro ao carregar mapa.</div>';
+      }
+    } else {
+      holder.innerHTML = `<div style="padding:20px;color:#333">Leaflet não está carregado. Adicione Leaflet e leaflet-heat para mapa satélite/heatmap.</div>`;
+    }
   }
 
   // ---------- updatePreview (integra tudo) ----------
@@ -458,9 +731,10 @@
   window._techint = {
     usuario,
     updatePreview,
-    clearCharts
+    clearCharts,
+    openMapModal
   };
 
-})(); 
+})();
 
 /* POINT END - main.js */
