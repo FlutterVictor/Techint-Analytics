@@ -1,5 +1,3 @@
-Lembrando, não altere layout.
-
 /* POINT INITIAL - main.js */
 
 /*
