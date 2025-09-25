@@ -1,104 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Techint Engenharia e Construção</title>
-<link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Techint Engenharia e Construção</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-
-<!-- POINT INITIAL - Menu Lateral -->
-<div class="sidebar">
+  <!-- POINT INITIAL - Menu Lateral -->
+  <div class="sidebar">
     <h2>Techint Engenharia e Construção</h2>
 
-    <!-- Botão Início -->
-    <div class="dashboard-item" data-setor="Inicio">Início</div>
-
     <div class="dashboard-item" data-setor="PYCP">PYCP
-        <div class="sub-menu">
-            <div class="disciplina-item" data-disciplina="Planejamento">Planejamento</div>
-            <div class="disciplina-item" data-disciplina="Medição">Medição</div>
-            <div class="disciplina-item" data-disciplina="Custo">Custo</div>
-            <div class="disciplina-item" data-disciplina="Almoxarifado">Almoxarifado</div>
-        </div>
+      <div class="sub-menu">
+        <div class="disciplina-item" data-disciplina="Planejamento">Planejamento</div>
+        <div class="disciplina-item" data-disciplina="Medição">Medição</div>
+        <div class="disciplina-item" data-disciplina="Custo">Custo</div>
+        <div class="disciplina-item" data-disciplina="Almoxarifado">Almoxarifado</div>
+      </div>
     </div>
 
     <div class="dashboard-item" data-setor="QSMS">QSMS
-        <div class="sub-menu">
-            <div class="disciplina-item" data-disciplina="Qualidade">Qualidade</div>
-            <div class="disciplina-item" data-disciplina="Segurança">Segurança</div>
-            <div class="disciplina-item" data-disciplina="Meio Ambiente">Meio Ambiente</div>
-            <div class="disciplina-item" data-disciplina="Saúde">Saúde</div>
-        </div>
+      <div class="sub-menu">
+        <div class="disciplina-item" data-disciplina="Qualidade">Qualidade</div>
+        <div class="disciplina-item" data-disciplina="Segurança">Segurança</div>
+        <div class="disciplina-item" data-disciplina="Meio Ambiente">Meio Ambiente</div>
+        <div class="disciplina-item" data-disciplina="Saúde">Saúde</div>
+      </div>
     </div>
 
     <div class="dashboard-item" data-setor="Produção">Produção
-        <div class="sub-menu">
-            <div class="disciplina-item" data-disciplina="Elétrica">Elétrica</div>
-            <div class="disciplina-item" data-disciplina="Mecânica">Mecânica</div>
-            <div class="disciplina-item" data-disciplina="Solda">Solda</div>
-            <div class="disciplina-item" data-disciplina="Pintura">Pintura</div>
-            <div class="disciplina-item" data-disciplina="Isolamento">Isolamento</div>
-            <div class="disciplina-item" data-disciplina="Movimentação de Carga">Movimentação de Carga</div>
-            <div class="disciplina-item" data-disciplina="Instrumentação">Instrumentação</div>
-            <div class="disciplina-item" data-disciplina="Andaime">Andaime</div>
-            <div class="disciplina-item" data-disciplina="Estruturas">Estruturas</div>
-        </div>
+      <div class="sub-menu">
+        <div class="disciplina-item" data-disciplina="Elétrica">Elétrica</div>
+        <div class="disciplina-item" data-disciplina="Mecânica">Mecânica</div>
+        <div class="disciplina-item" data-disciplina="Solda">Solda</div>
+        <div class="disciplina-item" data-disciplina="Pintura">Pintura</div>
+        <div class="disciplina-item" data-disciplina="Isolamento">Isolamento</div>
+        <div class="disciplina-item" data-disciplina="Movimentação de Carga">Movimentação de Carga</div>
+        <div class="disciplina-item" data-disciplina="Instrumentação">Instrumentação</div>
+        <div class="disciplina-item" data-disciplina="Andaime">Andaime</div>
+        <div class="disciplina-item" data-disciplina="Estruturas">Estruturas</div>
+      </div>
     </div>
 
     <div class="dashboard-item" data-setor="Diaf">Diaf
-        <div class="sub-menu">
-            <div class="disciplina-item" data-disciplina="Recursos Humanos">Recursos Humanos</div>
-            <div class="disciplina-item" data-disciplina="Financeiro">Financeiro</div>
-            <div class="disciplina-item" data-disciplina="Contratual">Contratual</div>
-        </div>
+      <div class="sub-menu">
+        <div class="disciplina-item" data-disciplina="Recursos Humanos">Recursos Humanos</div>
+        <div class="disciplina-item" data-disciplina="Financeiro">Financeiro</div>
+        <div class="disciplina-item" data-disciplina="Contratual">Contratual</div>
+      </div>
     </div>
 
-    <button class="logout-btn" id="logoutBtn">Logout</button>
-</div>
-<!-- POINT END - Menu Lateral -->
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+  <!-- POINT END - Menu Lateral -->
 
-<!-- POINT INITIAL - Área Principal -->
-<div class="main">
+  <!-- POINT INITIAL - Área Principal -->
+  <div class="main">
     <header>
-        <div class="user-photo" id="userPhoto" title="Clique para alterar foto"></div>
-        <div>
-            <div class="user-name" id="userName"></div>
-            <div class="user-role">Analista de Dados Jr</div>
-            <div class="user-project" id="userProject" title="Clique para mudar de projeto"></div>
-        </div>
-        <input type="file" id="fileInput" accept="image/*">
+      <div class="user-photo" id="userPhoto" title="Clique para alterar foto"></div>
+      <div>
+        <div class="user-name" id="userName">Usuário</div>
+        <div class="user-role">Analista de Dados Jr</div>
+        <div class="user-project" id="userProject" title="Clique para mudar de projeto">Selecione um projeto</div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" style="display:none;">
 
-        <!-- Card flutuante de seleção de projeto -->
-        <div id="projectCard">
-            <h4>Selecione o Projeto</h4>
-            <div><input type="radio" name="projeto" id="projetoPCI" value="PCI Usiminas"><label for="projetoPCI">PCI Usiminas (1087 colaboradores)</label></div>
-            <div><input type="radio" name="projeto" id="projetoMOA" value="MOA Usiminas"><label for="projetoMOA">MOA Usiminas (355 colaboradores)</label></div>
-            <div><input type="radio" name="projeto" id="projetoRestrito" value="Projeto restrito"><label for="projetoRestrito">Projeto restrito</label></div>
-            <button id="confirmProjectBtn">Confirmar</button>
-            <div id="projectMessage"></div>
+      <!-- Card flutuante de seleção de projeto -->
+      <div id="projectCard" class="hidden">
+        <h4>Selecione o Projeto</h4>
+        <div>
+          <input type="radio" name="projeto" id="projetoPCI" value="PCI Usiminas">
+          <label for="projetoPCI">PCI Usiminas (1087 colaboradores)</label>
         </div>
+        <div>
+          <input type="radio" name="projeto" id="projetoMOA" value="MOA Usiminas">
+          <label for="projetoMOA">MOA Usiminas (355 colaboradores)</label>
+        </div>
+        <div>
+          <input type="radio" name="projeto" id="projetoRestrito" value="Projeto restrito">
+          <label for="projetoRestrito">Projeto restrito</label>
+        </div>
+        <button id="confirmProjectBtn">Confirmar</button>
+        <div id="projectMessage"></div>
+      </div>
     </header>
 
     <!-- Prévia do Dashboard -->
     <div class="preview-card" id="previewCard">
-        <h3>Sistema de Gerenciamento</h3>
-        <p>Selecione uma disciplina para visualizar os indicadores.</p>
+      <h3>Sistema de Gerenciamento</h3>
+      <p>Selecione uma disciplina para visualizar os indicadores.</p>
 
-        <div class="mini-charts" id="miniChartsContainer">
-            <!-- Mini gráficos dinâmicos serão inseridos aqui -->
-        </div>
+      <div class="mini-charts" id="miniChartsContainer">
+        <!-- Mini gráficos dinâmicos serão inseridos aqui -->
+      </div>
 
-        <button class="access-btn" id="accessDashboardBtn" style="display:none;">Acessar</button>
+      <button class="access-btn" id="accessDashboardBtn" style="display:none;">Acessar</button>
     </div>
-</div>
-<!-- POINT END - Área Principal -->
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Container de gráficos principais -->
+    <div class="dashboard-container" id="dashboardContainer">
+      <!-- Gráficos dinâmicos carregam aqui -->
+    </div>
+  </div>
+  <!-- POINT END - Área Principal -->
 
-<!-- Main JS -->
-<script src="assets/js/main.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Leaflet (para mapas) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Main JS -->
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
