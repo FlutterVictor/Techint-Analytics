@@ -405,4 +405,99 @@ header {
   }
 }
 
-/* POINT END - style.css */
+/* ================================================
+   NOVOS ESTILOS PARA GRÁFICOS AVANÇADOS
+   ================================================ */
+
+/* Velocímetro (Gauge) - container para centralizar e limitar tamanho */
+.gauge-container {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 15px auto;
+  position: relative;
+}
+
+/* Indicador de desempenho (cards com destaque) */
+.performance-indicator {
+  background: linear-gradient(135deg, #004080, #0066cc);
+  color: #fff;
+  padding: 20px 25px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+.performance-indicator:hover {
+  background: linear-gradient(135deg, #0066cc, #004080);
+  box-shadow: 0 8px 26px rgba(0, 102, 204, 0.45);
+}
+
+/* Texto maior para o valor principal */
+.performance-indicator .value {
+  font-size: 2.8rem;
+  margin: 10px 0 5px 0;
+  letter-spacing: 1.5px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Radar Chart container - limitar largura */
+.radar-chart-container {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+/* Map container ajuste */
+#map {
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 15px;
+}
+
+/* Tooltip customizado para gráficos (se usado) */
+.chart-tooltip {
+  background-color: rgba(0, 64, 128, 0.85);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 1000;
+  user-select: none;
+  transition: opacity 0.15s ease;
+  opacity: 0;
+}
+
+/* Barra de progresso circular (exemplo) */
+.circular-progress {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: conic-gradient(#004080 0deg, #0066cc 120deg, #004080 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #004080;
+  font-weight: 700;
+  font-size: 1.6rem;
+  user-select: none;
+  margin: 10px auto;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+}
+
+/* Ajuste para textos internos na circular progress */
+.circular-progress span {
+  color: #0066cc;
+  font-size: 1.2rem;
+}
+
+/* ================================================
+   POINT END - style.css
+   ================================================ */
