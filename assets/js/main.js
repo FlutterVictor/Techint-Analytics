@@ -1,282 +1,244 @@
-// === MAIN DASHBOARD JS ===
-// Autor: ChatGPT (para Techint Engenharia e Construção)
+// === MENU LATERAL E SUBMENUS ===
+document.querySelectorAll(".dashboard-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const active = document.querySelector(".dashboard-item.active");
+    if (active && active !== item) {
+      active.classList.remove("active");
+      const prevSub = active.querySelector(".sub-menu");
+      if (prevSub) prevSub.style.display = "none";
+    }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const dashboardItems = document.querySelectorAll(".dashboard-item");
-  const userProject = document.getElementById("userProject");
-  const projectCard = document.getElementById("projectCard");
-  const confirmProjectBtn = document.getElementById("confirmProjectBtn");
-  const projectMessage = document.getElementById("projectMessage");
-  const miniChartsContainer = document.getElementById("miniChartsContainer");
-  const dashboardContainer = document.getElementById("dashboardContainer");
-  const accessDashboardBtn = document.getElementById("accessDashboardBtn");
-
-  let selectedProject = null;
-  let activeSetor = null;
-  let activeDisciplina = null;
-
-  // === INTERAÇÃO DO MENU ===
-  dashboardItems.forEach(item => {
-    item.addEventListener("click", e => {
-      const submenu = item.querySelector(".sub-menu");
-      const isActive = item.classList.contains("active");
-
-      // Fecha todos os submenus
-      document.querySelectorAll(".dashboard-item").forEach(i => i.classList.remove("active"));
-      document.querySelectorAll(".sub-menu").forEach(sm => (sm.style.display = "none"));
-
-      // Abre o submenu clicado
-      if (!isActive && submenu) {
-        item.classList.add("active");
-        submenu.style.display = "flex";
-      }
-    });
-
-    // Clique nas disciplinas
-    const disciplinas = item.querySelectorAll(".disciplina-item");
-    disciplinas.forEach(d => {
-      d.addEventListener("click", e => {
-        e.stopPropagation();
-        document.querySelectorAll(".disciplina-item").forEach(x => x.classList.remove("active"));
-        d.classList.add("active");
-
-        activeSetor = item.dataset.setor;
-        activeDisciplina = d.dataset.disciplina;
-
-        renderPreview(activeSetor, activeDisciplina);
-      });
-    });
+    item.classList.toggle("active");
+    const submenu = item.querySelector(".sub-menu");
+    if (submenu) {
+      submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
+    }
   });
+});
 
-  // === SELEÇÃO DE PROJETO ===
-  userProject.addEventListener("click", e => {
+// Controle seleção da disciplina (submenus)
+document.querySelectorAll(".disciplina-item").forEach(subItem => {
+  subItem.addEventListener("click", e => {
     e.stopPropagation();
-    projectCard.style.display = projectCard.style.display === "block" ? "none" : "block";
+    document.querySelectorAll(".disciplina-item.active").forEach(act => act.classList.remove("active"));
+    subItem.classList.add("active");
   });
+});
 
-  document.addEventListener("click", () => {
-    if (projectCard.style.display === "block") projectCard.style.display = "none";
-  });
+// === CARD DE SELEÇÃO DE PROJETO ===
+const userProject = document.querySelector(".user-project");
+const projectCard = document.getElementById("projectCard");
+const confirmProjectBtn = document.getElementById("confirmProjectBtn");
+const projectMessage = document.getElementById("projectMessage");
 
-  confirmProjectBtn.addEventListener("click", () => {
-    const selected = document.querySelector("input[name='projeto']:checked");
-    if (!selected) {
-      projectMessage.textContent = "Selecione um projeto antes de confirmar.";
-      projectMessage.style.color = "red";
-      return;
-    }
-    selectedProject = selected.value;
-    userProject.textContent = selectedProject;
-    projectCard.style.display = "none";
-  });
+userProject.addEventListener("click", () => {
+  projectCard.style.display = projectCard.style.display === "block" ? "none" : "block";
+});
 
-  // === FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO ===
-  function renderPreview(setor, disciplina) {
-    miniChartsContainer.innerHTML = "";
-    dashboardContainer.innerHTML = "";
-    accessDashboardBtn.style.display = "inline-block";
-
-    const title = `${setor} - ${disciplina}`;
-    document.querySelector(".preview-card h3").textContent = title;
-
-    // Cria 3 mini-gráficos
-    createMiniChart(`${disciplina} - Indicador 1`, randomData(5), "bar");
-    createMiniChart(`${disciplina} - Indicador 2`, randomData(5), "doughnut");
-    createMiniChart(`${disciplina} - Indicador 3`, randomData(5), "line");
-
-    // Botão acessar dashboard
-    accessDashboardBtn.onclick = () => renderMainDashboard(setor, disciplina);
-  }
-
-  // === DASHBOARD COMPLETO ===
-  function renderMainDashboard(setor, disciplina) {
-    dashboardContainer.innerHTML = "";
-    accessDashboardBtn.style.display = "none";
-
-    switch (setor) {
-      case "DIAF":
-        if (disciplina === "Recursos Humanos") renderRH();
-        else if (disciplina === "Financeiro") renderFinanceiro();
-        break;
-
-      case "PYCP":
-        if (disciplina === "Planejamento") renderPlanejamento();
-        else if (disciplina === "Custo") renderCusto();
-        break;
-
-      case "Produção":
-        renderProducao(disciplina);
-        break;
-
-      case "QSMS":
-      case "CMASS":
-        renderQSMS(disciplina);
-        break;
-    }
-  }
-
-  // === FUNÇÕES DE GRÁFICOS ===
-
-  // 1️⃣ DIAF - Recursos Humanos
-  function renderRH() {
-    createCard("Total de Colaboradores", "1.087");
-    createChart("Absenteísmo", [3, 4, 5, 2, 6], "bar");
-    createChart("Treinamentos Mensais", [12, 8, 15, 10, 14], "line");
-  }
-
-  // 2️⃣ DIAF - Financeiro
-  function renderFinanceiro() {
-    createCard("Custo Total (R$)", "12.8M");
-    createChart("Distribuição de Custos", [30, 25, 20, 15, 10], "pie");
-    createChart("Evolução de Gastos", [10, 12, 11, 14, 13], "line");
-  }
-
-  // 3️⃣ PYCP - Planejamento
-  function renderPlanejamento() {
-    createCard("Avanço Físico", "84%");
-    createChart("Avanço Semanal (%)", [70, 75, 80, 82, 84], "bar");
-    createChart("Cronograma", [5, 10, 8, 6, 4], "line");
-  }
-
-  // 4️⃣ PYCP - Custo
-  function renderCusto() {
-    createCard("Desvio Financeiro", "5.3%");
-    createChart("Planejado x Realizado", [100, 95, 98, 105, 102], "bar");
-    createChart("Custos por Área", [25, 30, 15, 20, 10], "pie");
-  }
-
-  // 5️⃣ Produção
-  function renderProducao(disciplina) {
-    createCard("Frente de Trabalho", disciplina);
-    createChart("Avanço Diário", [60, 65, 70, 75, 80], "line");
-    createChart("Não Conformidades", [2, 3, 1, 4, 2], "bar");
-    createGauge("Produtividade", 78);
-  }
-
-  // 6️⃣ QSMS / CMASS
-  function renderQSMS(disciplina) {
-    createCard("Área", disciplina);
-    createChart("Ocorrências Mensais", [5, 4, 6, 3, 2], "bar");
-    createChart("Status de Auditorias", [60, 25, 15], "pie");
-    createMap();
-  }
-
-  // === FUNÇÕES AUXILIARES ===
-
-  function createCard(titulo, valor) {
-    const card = document.createElement("div");
-    card.classList.add("chart-card");
-    card.innerHTML = `
-      <div class="chart-card-title">${titulo}</div>
-      <div class="chart-card-value">${valor}</div>
-    `;
-    dashboardContainer.appendChild(card);
-  }
-
-  function createChart(titulo, dados, tipo) {
-    const container = document.createElement("div");
-    container.classList.add("chart-card");
-    const canvas = document.createElement("canvas");
-    container.innerHTML = `<div class="chart-card-title">${titulo}</div>`;
-    container.appendChild(canvas);
-    dashboardContainer.appendChild(container);
-
-    new Chart(canvas, {
-      type: tipo,
-      data: {
-        labels: ["Jan", "Fev", "Mar", "Abr", "Mai"],
-        datasets: [{
-          label: titulo,
-          data: dados,
-          backgroundColor: [
-            "#004080", "#0066cc", "#0099ff", "#33ccff", "#80dfff"
-          ],
-          borderColor: "#003366",
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: tipo !== "bar" } }
-      }
-    });
-  }
-
-  function createMiniChart(titulo, dados, tipo) {
-    const container = document.createElement("div");
-    container.classList.add("chart-card");
-    const canvas = document.createElement("canvas");
-    container.innerHTML = `<div class="chart-card-title">${titulo}</div>`;
-    container.appendChild(canvas);
-    miniChartsContainer.appendChild(container);
-
-    new Chart(canvas, {
-      type: tipo,
-      data: {
-        labels: ["A", "B", "C", "D", "E"],
-        datasets: [{
-          data: dados,
-          backgroundColor: ["#004080", "#0066cc", "#0099ff", "#33ccff", "#80dfff"]
-        }]
-      },
-      options: { responsive: true, plugins: { legend: { display: false } } }
-    });
-  }
-
-  // Gráfico tipo velocímetro
-  function createGauge(titulo, valor) {
-    const container = document.createElement("div");
-    container.classList.add("chart-card");
-    container.innerHTML = `<div class="chart-card-title">${titulo}</div><canvas></canvas>`;
-    dashboardContainer.appendChild(container);
-    const ctx = container.querySelector("canvas");
-
-    new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        datasets: [{
-          data: [valor, 100 - valor],
-          backgroundColor: ["#0099ff", "#e0e0e0"],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        rotation: -90,
-        circumference: 180,
-        cutout: "75%",
-        plugins: {
-          tooltip: { enabled: false },
-          legend: { display: false }
-        }
-      }
-    });
-
-    const label = document.createElement("div");
-    label.style.position = "relative";
-    label.style.top = "-80px";
-    label.style.textAlign = "center";
-    label.style.fontSize = "1.4em";
-    label.style.fontWeight = "bold";
-    label.textContent = valor + "%";
-    container.appendChild(label);
-  }
-
-  // Mapa
-  function createMap() {
-    const container = document.createElement("div");
-    container.classList.add("chart-card");
-    container.innerHTML = `<div class="chart-card-title">Mapa de Ocorrências</div><div id="map" style="height:250px;border-radius:8px;"></div>`;
-    dashboardContainer.appendChild(container);
-
-    const map = L.map("map").setView([-19.5, -42.6], 12);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 18,
-    }).addTo(map);
-    L.marker([-19.5, -42.6]).addTo(map).bindPopup("Obra Principal").openPopup();
-  }
-
-  // Gera dados aleatórios
-  function randomData(qtde) {
-    return Array.from({ length: qtde }, () => Math.floor(Math.random() * 100));
+confirmProjectBtn.addEventListener("click", () => {
+  const selected = [...projectCard.querySelectorAll("input[type=radio]")].find(r => r.checked);
+  if (selected) {
+    userProject.textContent = `Projeto: ${selected.value}`;
+    projectMessage.textContent = "Projeto confirmado com sucesso!";
+    projectMessage.style.color = "green";
+    setTimeout(() => {
+      projectCard.style.display = "none";
+      projectMessage.textContent = "";
+    }, 1500);
+  } else {
+    projectMessage.textContent = "Selecione um projeto antes de confirmar.";
+    projectMessage.style.color = "red";
   }
 });
+
+// Fecha card se clicar fora
+document.addEventListener("click", e => {
+  if (!projectCard.contains(e.target) && e.target !== userProject) {
+    projectCard.style.display = "none";
+  }
+});
+
+// === GRÁFICOS COM CHART.JS ===
+
+// 1) Gráfico Velocímetro (Gauge) - usando Doughnut com customização
+const gaugeCtx = document.getElementById("gaugeChart").getContext("2d");
+const gaugeValue = 72; // Exemplo valor em %
+const gaugeMax = 100;
+
+const gaugeChart = new Chart(gaugeCtx, {
+  type: "doughnut",
+  data: {
+    labels: ["Valor", "Resto"],
+    datasets: [{
+      data: [gaugeValue, gaugeMax - gaugeValue],
+      backgroundColor: ["#004080", "#d1e0ff"],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    rotation: -Math.PI,
+    circumference: Math.PI,
+    cutout: "80%",
+    plugins: {
+      tooltip: { enabled: false },
+      legend: { display: false },
+      annotation: {
+        annotations: []
+      }
+    },
+    animation: {
+      animateRotate: true,
+      duration: 1200
+    }
+  }
+});
+
+// Texto central do velocímetro (via plugin)
+Chart.register({
+  id: 'gaugeCenterText',
+  afterDraw(chart) {
+    const {ctx, chartArea: {width, height}} = chart;
+    ctx.save();
+    ctx.font = 'bold 26px "Segoe UI"';
+    ctx.fillStyle = '#004080';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`${gaugeValue}%`, width/2, height*0.75);
+    ctx.restore();
+  }
+});
+gaugeChart.update();
+
+// 2) Radar Chart
+const radarCtx = document.getElementById("radarChart").getContext("2d");
+const radarChart = new Chart(radarCtx, {
+  type: "radar",
+  data: {
+    labels: ["Velocidade", "Resistência", "Agilidade", "Precisão", "Força", "Tática"],
+    datasets: [{
+      label: "Desempenho",
+      data: [65, 75, 70, 80, 60, 90],
+      fill: true,
+      backgroundColor: "rgba(0, 64, 128, 0.3)",
+      borderColor: "#004080",
+      pointBackgroundColor: "#004080",
+      pointBorderColor: "#fff",
+      pointHoverBackgroundColor: "#fff",
+      pointHoverBorderColor: "#004080"
+    }]
+  },
+  options: {
+    scales: {
+      r: {
+        angleLines: {
+          color: "#ccc"
+        },
+        grid: {
+          color: "#ddd"
+        },
+        pointLabels: {
+          color: "#004080",
+          font: {
+            size: 14,
+            weight: "600"
+          }
+        },
+        ticks: {
+          display: false,
+          max: 100,
+          min: 0
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        enabled: true
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: false
+  }
+});
+
+// 3) Mini Charts - Exemplo simples (Barras)
+const miniCharts = document.querySelectorAll(".chart-card canvas");
+miniCharts.forEach((canvas, i) => {
+  new Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun"],
+      datasets: [{
+        label: "Vendas",
+        data: [12, 19, 3, 5, 2, 3].map(n => n + i * 5), // Varia valores para cada mini chart
+        backgroundColor: "#004080"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {legend: {display: false}},
+      scales: {
+        x: {display: false},
+        y: {display: false, beginAtZero: true}
+      },
+      animation: {
+        duration: 700
+      }
+    }
+  });
+});
+
+// === MAPA LEAFLET ===
+const map = L.map("map").setView([-23.55, -46.63], 10); // Exemplo: São Paulo
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 18,
+}).addTo(map);
+
+// Marcadores de exemplo
+const markersData = [
+  { lat: -23.55, lng: -46.63, title: "Centro SP" },
+  { lat: -23.58, lng: -46.66, title: "Pinheiros" },
+  { lat: -23.53, lng: -46.62, title: "Itaim" },
+];
+
+markersData.forEach(({lat, lng, title}) => {
+  L.marker([lat, lng]).addTo(map).bindPopup(title);
+});
+
+// Controle do zoom manual com botão (exemplo)
+const zoomInBtn = document.createElement("button");
+zoomInBtn.textContent = "+";
+zoomInBtn.style.position = "absolute";
+zoomInBtn.style.top = "10px";
+zoomInBtn.style.right = "50px";
+zoomInBtn.style.zIndex = 1000;
+zoomInBtn.style.padding = "6px 10px";
+zoomInBtn.style.background = "#004080";
+zoomInBtn.style.color = "#fff";
+zoomInBtn.style.border = "none";
+zoomInBtn.style.borderRadius = "6px";
+zoomInBtn.style.cursor = "pointer";
+
+const zoomOutBtn = zoomInBtn.cloneNode(true);
+zoomOutBtn.textContent = "-";
+zoomOutBtn.style.top = "50px";
+
+document.getElementById("map").appendChild(zoomInBtn);
+document.getElementById("map").appendChild(zoomOutBtn);
+
+zoomInBtn.addEventListener("click", () => {
+  map.zoomIn();
+});
+zoomOutBtn.addEventListener("click", () => {
+  map.zoomOut();
+});
+
+// === ANIMAÇÃO E INTERAÇÃO GERAL ===
+// Para futuras interações e atualizações
+
