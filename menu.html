@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Techint Engenharia e Construção</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Leaflet CSS para mapas -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
 </head>
 <body>
   <!-- POINT INITIAL - Menu Lateral -->
@@ -64,21 +69,21 @@
         <div class="user-role">Analista de Dados Jr</div>
         <div class="user-project" id="userProject" title="Clique para mudar de projeto">Selecione um projeto</div>
       </div>
-      <input type="file" id="fileInput" accept="image/*" style="display:none;">
+      <input type="file" id="fileInput" accept="image/*" style="display:none;" />
 
       <!-- Card flutuante de seleção de projeto -->
       <div id="projectCard" class="hidden">
         <h4>Selecione o Projeto</h4>
         <div>
-          <input type="radio" name="projeto" id="projetoPCI" value="PCI Usiminas">
+          <input type="radio" name="projeto" id="projetoPCI" value="PCI Usiminas" />
           <label for="projetoPCI">PCI Usiminas (1087 colaboradores)</label>
         </div>
         <div>
-          <input type="radio" name="projeto" id="projetoMOA" value="MOA Usiminas">
+          <input type="radio" name="projeto" id="projetoMOA" value="MOA Usiminas" />
           <label for="projetoMOA">MOA Usiminas (355 colaboradores)</label>
         </div>
         <div>
-          <input type="radio" name="projeto" id="projetoRestrito" value="Projeto restrito">
+          <input type="radio" name="projeto" id="projetoRestrito" value="Projeto restrito" />
           <label for="projetoRestrito">Projeto restrito</label>
         </div>
         <button id="confirmProjectBtn">Confirmar</button>
@@ -105,10 +110,12 @@
   </div>
   <!-- POINT END - Área Principal -->
 
+  <!-- Map container (opcional, se quiser mostrar mapa em algum lugar) -->
+  <!-- <div id="map" style="height: 400px;"></div> -->
+
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Leaflet (para mapas) -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <!-- Main JS -->
   <script src="assets/js/main.js"></script>
