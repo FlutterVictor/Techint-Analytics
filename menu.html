@@ -4,12 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Techint Engenharia e Construção</title>
+
+  <!-- Estilos principais -->
   <link rel="stylesheet" href="assets/css/style.css" />
+
   <!-- Leaflet CSS para mapas -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Plugin para exportar PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <!-- POINT INITIAL - Menu Lateral -->
@@ -97,26 +104,28 @@
       <p>Selecione uma disciplina para visualizar os indicadores.</p>
 
       <div class="mini-charts" id="miniChartsContainer">
-        <!-- Mini gráficos dinâmicos serão inseridos aqui -->
+        <!-- Mini gráficos dinâmicos -->
       </div>
-
-      <button class="access-btn" id="accessDashboardBtn" style="display:none;">Acessar</button>
     </div>
 
-    <!-- Container de gráficos principais -->
+    <!-- Container principal de gráficos -->
     <div class="dashboard-container" id="dashboardContainer">
-      <!-- Gráficos dinâmicos carregam aqui -->
+      <!-- Todos os gráficos dinâmicos serão carregados aqui -->
+    </div>
+
+    <!-- Botão de exportar PDF -->
+    <div class="export-area">
+      <button id="exportPDFBtn" class="export-btn">📄 Gerar PDF</button>
     </div>
   </div>
   <!-- POINT END - Área Principal -->
 
-  <!-- Map container (opcional, se quiser mostrar mapa em algum lugar) -->
+  <!-- Map container (opcional) -->
   <!-- <div id="map" style="height: 400px;"></div> -->
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Leaflet (para mapas) -->
+  <!-- Leaflet -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
   <!-- Main JS -->
   <script src="assets/js/main.js"></script>
 </body>
