@@ -1,5 +1,5 @@
 /* ================================================
-   POINT INITIAL - style.css (versão aprimorada final)
+   POINT INITIAL - style.css (versão aprimorada)
    ================================================ */
 
 /* Reset e base */
@@ -333,7 +333,10 @@ header {
     overflow-x: auto;
     padding: 10px;
   }
-  .dashboard-item { margin-right: 10px; margin-bottom: 0; }
+  .dashboard-item {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
   .sub-menu {
     position: absolute;
     background: #004080;
@@ -346,14 +349,31 @@ header {
   }
   .main { padding: 15px; flex: 1; }
 }
+
 @media (max-width: 768px) {
-  .sidebar { flex-direction: column; width: 100%; max-height: 250px; overflow-y: auto; }
-  header { flex-direction: column; align-items: flex-start; gap: 5px; }
-  .chart-card { flex: 1 1 calc(50% - 15px); max-width: calc(50% - 15px); }
+  .sidebar {
+    flex-direction: column;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .chart-card {
+    flex: 1 1 calc(50% - 15px);
+    max-width: calc(50% - 15px);
+  }
 }
+
 @media (max-width: 480px) {
   .sidebar { width: 100%; max-height: 200px; }
-  .chart-card { flex: 1 1 100%; max-width: 100%; }
+  .chart-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
   .chart-card canvas { min-height: 140px; }
 }
 
@@ -370,7 +390,12 @@ header {
    ================================================ */
 
 /* Velocímetro (Gauge) - container para centralizar e limitar tamanho */
-.gauge-container { width: 100%; max-width: 320px; margin: 0 auto 15px auto; position: relative; }
+.gauge-container {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 15px auto;
+  position: relative;
+}
 
 /* Indicador de desempenho (cards com destaque) */
 .performance-indicator {
@@ -389,6 +414,8 @@ header {
   background: linear-gradient(135deg, #0066cc, #004080);
   box-shadow: 0 8px 26px rgba(0, 102, 204, 0.45);
 }
+
+/* Texto maior para o valor principal */
 .performance-indicator .value {
   font-size: 2.8rem;
   margin: 10px 0 5px 0;
@@ -397,7 +424,10 @@ header {
 }
 
 /* Radar Chart container - limitar largura */
-.radar-chart-container { max-width: 320px; margin: 0 auto; }
+.radar-chart-container {
+  max-width: 320px;
+  margin: 0 auto;
+}
 
 /* Map container ajuste */
 #map {
@@ -424,7 +454,7 @@ header {
   opacity: 0;
 }
 
-/* Barra de progresso circular */
+/* Barra de progresso circular (exemplo) */
 .circular-progress {
   width: 140px;
   height: 140px;
@@ -441,38 +471,57 @@ header {
   box-shadow: 0 3px 12px rgba(0,0,0,0.1);
   transition: background 0.3s ease;
 }
-.circular-progress span { color: #0066cc; font-size: 1.2rem; }
+
+/* Ajuste para textos internos na circular progress */
+.circular-progress span {
+  color: #0066cc;
+  font-size: 1.2rem;
+}
 
 /* ================================================
-   NOVOS ESTILOS - EXPORTAÇÃO DE PDF
+   NOVO - DASHBOARD RESPONSIVO POR TAMANHO DE GRÁFICO
    ================================================ */
-.export-area {
+
+/* Container geral dos gráficos */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
   width: 100%;
-  padding: 15px 0;
-  display: flex;
-  justify-content: flex-end;
-}
-.export-btn {
-  padding: 8px 16px;
-  background: linear-gradient(90deg, #004080, #0066cc);
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.export-btn:hover {
-  background: #0073e6;
-  transform: scale(1.05);
 }
 
-/* Paleta dinâmica de gráficos (cores adicionais) */
-.chart-color-1 { background-color: #004080; }
-.chart-color-2 { background-color: #0066cc; }
-.chart-color-3 { background-color: #0099ff; }
-.chart-color-4 { background-color: #66c2ff; }
-.chart-color-5 { background-color: #cce6ff; }
+/* Gráficos pequenos (3 por linha em telas grandes) */
+.chart-small {
+  grid-column: span 1;
+}
+
+/* Gráficos médios/grandes (2 por linha) */
+.chart-medium {
+  grid-column: span 2;
+}
+
+/* Gráficos extra grandes (1 por linha, full width) */
+.chart-large {
+  grid-column: span 3;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 1024px) {
+  .chart-medium { grid-column: span 2; }
+  .chart-large { grid-column: span 2; }
+}
+
+@media (max-width: 768px) {
+  .chart-small,
+  .chart-medium,
+  .chart-large { grid-column: span 1; }
+}
+
+@media (max-width: 480px) {
+  .chart-small,
+  .chart-medium,
+  .chart-large { grid-column: span 1; }
+}
 
 /* ================================================
    POINT END - style.css
